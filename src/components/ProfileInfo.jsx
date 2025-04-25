@@ -38,7 +38,7 @@ export function ProfileInfo() {
     }
 
     try {
-      const res = await fetch(`http://13.53.182.174:5000/api/user/update-profile/${storedUser._id}`, {
+      const res = await fetch(`https://api.sakaoglustore.net/api/user/update-profile/${storedUser._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
