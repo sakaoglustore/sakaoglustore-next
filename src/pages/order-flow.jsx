@@ -1,9 +1,11 @@
-// src/pages/order-flow.jsx
 'use client';
 import { useEffect, useState } from 'react';
 import styles from '@/styles/OrderFlowPage.module.css';
 
 export default function OrderFlowPage() {
+  const [user, setUser] = useState(null);
+  const userId = user?.id || user?._id;
+
   const [cartItems, setCartItems] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
@@ -12,8 +14,21 @@ export default function OrderFlowPage() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({ title: '', fullAddress: '' });
 
-  const user = JSON.parse(localStorage.getItem('user'));
-  const userId = user?.id || user?._id;
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchCart();
+      fetchAddresses();
+    }
+  }, [user]);
 
   const fetchCart = () => {
     fetch(`http://13.53.182.174:5000/api/cart/${userId}`)
@@ -28,11 +43,6 @@ export default function OrderFlowPage() {
   const fetchAddresses = () => {
     setAddresses(user?.addresses || []);
   };
-
-  useEffect(() => {
-    fetchCart();
-    fetchAddresses();
-  }, []);
 
   const updateQuantity = (productId, newQty) => {
     if (newQty < 1) return;
