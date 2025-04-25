@@ -16,7 +16,7 @@ export default function OrderFlowPage() {
   const userId = user?.id || user?._id;
 
   const fetchCart = () => {
-    fetch(`http://localhost:5000/api/cart/${userId}`)
+    fetch(`http://13.53.182.174:5000/api/cart/${userId}`)
       .then(res => res.json())
       .then(data => {
         const cart = Array.isArray(data) ? data : data.cart || [];
@@ -36,7 +36,7 @@ export default function OrderFlowPage() {
 
   const updateQuantity = (productId, newQty) => {
     if (newQty < 1) return;
-    fetch('http://localhost:5000/api/cart/add', {
+    fetch('http://13.53.182.174:5000/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: newQty })
@@ -47,7 +47,7 @@ export default function OrderFlowPage() {
   };
 
   const removeItem = (productId) => {
-    fetch(`http://localhost:5000/api/cart/remove/${userId}/${productId}`, {
+    fetch(`http://13.53.182.174:5000/api/cart/remove/${userId}/${productId}`, {
       method: 'DELETE'
     })
       .then(res => res.json())
@@ -74,7 +74,7 @@ export default function OrderFlowPage() {
     try {
       const quantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-      const res = await fetch(`http://localhost:5000/api/box/open-box/${userId}/${selectedAddressId}`, {
+      const res = await fetch(`http://13.53.182.174:5000/api/box/open-box/${userId}/${selectedAddressId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ quantity })
@@ -116,7 +116,7 @@ export default function OrderFlowPage() {
       updatedAddresses.push(form);
     }
 
-    const res = await fetch(`http://localhost:5000/api/user/update-addresses/${userId}`, {
+    const res = await fetch(`http://13.53.182.174:5000/api/user/update-addresses/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ addresses: updatedAddresses })
@@ -132,7 +132,7 @@ export default function OrderFlowPage() {
 
   const deleteAddress = async index => {
     const updatedAddresses = addresses.filter((_, i) => i !== index);
-    const res = await fetch(`http://localhost:5000/api/user/update-addresses/${userId}`, {
+    const res = await fetch(`http://13.53.182.174:5000/api/user/update-addresses/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ addresses: updatedAddresses })

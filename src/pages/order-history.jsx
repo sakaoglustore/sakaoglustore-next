@@ -11,7 +11,7 @@ export default function OrderHistoryPage() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) return;
 
-    axios.get(`http://localhost:5000/api/user/orders/${user.id}`)
+    axios.get(`http://13.53.182.174:5000/api/user/orders/${user.id}`)
       .then(res => {
         const orders = res.data;
         const grouped = {};
@@ -68,7 +68,7 @@ export default function OrderHistoryPage() {
       const orderId = groupedOrders.find(group => group.orderMap[confirmationCode])?.orderMap[confirmationCode];
       if (!orderId) return alert('Sipariş bulunamadı');
 
-      await axios.put(`http://localhost:5000/api/orders/${orderId}/cancel`);
+      await axios.put(`http://13.53.182.174:5000/api/orders/${orderId}/cancel`);
       alert('Sipariş iptal edildi');
       window.location.reload();
     } catch (err) {
