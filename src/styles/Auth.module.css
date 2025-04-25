@@ -1,0 +1,22 @@
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+    margin: 40px auto;
+  }
+  .auth-form input,
+  .auth-form button {
+    padding: 10px;
+    font-size: 16px;
+  }
+  .auth-form button {
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .auth-form p {
+    color: red;
+  }
+  
