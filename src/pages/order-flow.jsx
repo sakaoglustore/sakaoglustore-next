@@ -32,7 +32,7 @@ export default function OrderFlowPage() {
   }, [user]);
 
   const fetchCart = () => {
-    fetch(`http://localhost:5000/api/cart/${userId}`)
+    fetch(`https://api.sakaoglustore.net/api/cart/${userId}`)
       .then(res => res.json())
       .then(data => {
         const cart = Array.isArray(data) ? data : data.cart || [];
@@ -47,7 +47,7 @@ export default function OrderFlowPage() {
 
   const updateQuantity = (productId, newQty) => {
     if (newQty < 1) return;
-    fetch('http://localhost:5000/api/cart/add', {
+    fetch('https://api.sakaoglustore.net/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: newQty })
@@ -55,7 +55,7 @@ export default function OrderFlowPage() {
   };
 
   const removeItem = (productId) => {
-    fetch(`http://localhost:5000/api/cart/remove/${userId}/${productId}`, {
+    fetch(`https://api.sakaoglustore.net/api/cart/remove/${userId}/${productId}`, {
       method: 'DELETE'
     }).then(() => fetchCart());
   };
@@ -106,7 +106,7 @@ export default function OrderFlowPage() {
 
     try {
       const orderId = `ORDER-${Date.now()}`;
-      const response = await fetch('http://localhost:5000/api/payment/checkout', {
+      const response = await fetch('https://api.sakaoglustore.net/api/payment/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, totalAmount: totals.finalTotal.toFixed(2), orderId })
@@ -140,7 +140,7 @@ export default function OrderFlowPage() {
     if (editingIndex !== null) updatedAddresses[editingIndex] = form;
     else updatedAddresses.push(form);
 
-    const res = await fetch(`http://localhost:5000/api/user/update-addresses/${userId}`, {
+    const res = await fetch(`https://api.sakaoglustore.net/api/user/update-addresses/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ addresses: updatedAddresses })
@@ -156,7 +156,7 @@ export default function OrderFlowPage() {
 
   const deleteAddress = async index => {
     const updatedAddresses = addresses.filter((_, i) => i !== index);
-    const res = await fetch(`http://localhost:5000/api/user/update-addresses/${userId}`, {
+    const res = await fetch(`https://api.sakaoglustore.net/api/user/update-addresses/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ addresses: updatedAddresses })

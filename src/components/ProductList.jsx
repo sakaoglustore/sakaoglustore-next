@@ -10,7 +10,7 @@ export default function ProductList({ category }) {
   const router = useRouter();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/gifts/all')
+    fetch('https://api.sakaoglustore.net/api/gifts/all')
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.log(err));
@@ -18,7 +18,7 @@ export default function ProductList({ category }) {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?.id || user?._id;
     if (userId) {
-      fetch(`http://localhost:5000/api/cart/${userId}`)
+      fetch(`https://api.sakaoglustore.net/api/cart/${userId}`)
         .then(res => res.json())
         .then(data => {
           const qtyMap = {};
@@ -45,7 +45,7 @@ export default function ProductList({ category }) {
       return;
     }
 
-    fetch('http://localhost:5000/api/cart/add', {
+    fetch('https://api.sakaoglustore.net/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: newQty })
