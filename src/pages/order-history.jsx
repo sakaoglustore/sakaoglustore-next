@@ -10,15 +10,17 @@ export default function OrderHistoryPage() {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) return;
-
-    axios.get(`https://api.sakaoglustore.net/api/user/orders/${user.id}`)
+  
+    const userId = user.id || user._id; // ✅ Hataları engeller
+  
+    axios.get(`http://localhost:5000/api/user/orders/${userId}`)
       .then(res => {
         const orders = res.data;
         const grouped = {};
-
+  
         for (const order of orders) {
           const key = order.trackingNumber || 'NO_TRACKING';
-
+  
           if (!grouped[key]) {
             grouped[key] = {
               trackingNumber: order.trackingNumber,
@@ -28,10 +30,10 @@ export default function OrderHistoryPage() {
               itemsMap: {},
             };
           }
-
+  
           grouped[key].confirmationCodes.push(order.confirmationCode);
           grouped[key].orderMap[order.confirmationCode] = order._id;
-
+  
           for (const item of order.items) {
             const id = item.product?._id || 'NO_ID';
             if (!grouped[key].itemsMap[id]) {
@@ -43,38 +45,22 @@ export default function OrderHistoryPage() {
             grouped[key].itemsMap[id].quantity += item.quantity;
           }
         }
-
+  
         const groupedArray = Object.values(grouped).map(group => ({
           ...group,
           items: Object.values(group.itemsMap)
         }));
-
+  
         setGroupedOrders(groupedArray);
       })
       .catch(err => console.error('❌ Siparişler alınamadı:', err));
   }, []);
+  
 
   const extractTrackingNumber = (url) => {
     if (url === 'İptal Edildi') return null;
     const match = url?.match(/code=(\d+)/);
     return match ? match[1] : null;
-  };
-
-  const cancelOrder = async (confirmationCode) => {
-    const confirm = window.confirm("Bu siparişi iptal etmek istediğinizden emin misiniz?");
-    if (!confirm) return;
-
-    try {
-      const orderId = groupedOrders.find(group => group.orderMap[confirmationCode])?.orderMap[confirmationCode];
-      if (!orderId) return alert('Sipariş bulunamadı');
-
-      await axios.put(`https://api.sakaoglustore.net/api/orders/${orderId}/cancel`);
-      alert('Sipariş iptal edildi');
-      window.location.reload();
-    } catch (err) {
-      alert('İptal işlemi başarısız');
-      console.error(err);
-    }
   };
 
   return (
@@ -107,9 +93,7 @@ export default function OrderHistoryPage() {
                 {group.confirmationCodes.map((code, idx) => (
                   <div key={idx} className={styles.confirmationEntry}>
                     <code>{code}</code>
-                    {(group.trackingNumber !== 'İptal Edildi' && group.trackingNumber == "")  && (
-                      <button className={styles.cancelBtn} onClick={() => cancelOrder(code)}>Siparişi İptal Et</button>
-                    )}
+
                   </div>
                 ))}
               </div>

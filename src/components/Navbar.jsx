@@ -11,8 +11,15 @@ export default function Navbar() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const userFromStorage = JSON.parse(localStorage.getItem('user'));
-      setUser(userFromStorage);
+      const userFromStorage = localStorage.getItem('user');
+      if (userFromStorage) {
+        try {
+          const parsedUser = JSON.parse(userFromStorage);
+          setUser(parsedUser);
+        } catch (err) {
+          console.error('Kullanıcı bilgisi okunamadı:', err);
+        }
+      }
     }
   }, [router.pathname]);
 
@@ -27,14 +34,16 @@ export default function Navbar() {
       <button className={styles['menu-toggle']} onClick={toggleMenu}>
         ☰
       </button>
-
+      <a href="/kvkk">KVKK Aydınlatma Metni</a>
       <ul className={`${styles['nav-links']} ${menuOpen ? styles.open : ''}`}>
         <li><Link href="/about">Hakkımızda</Link></li>
         <li><button className={styles['cart-btn']} onClick={() => router.push('/order-flow')}>Sepetim</button></li>
         {user ? (
           <>
             <li><Link href="/order-history">Siparişlerim</Link></li>
-            <li><Link href="/profile">Profil ({user.name})</Link></li>
+            <li><Link href="/profile">
+              Profil ({user.firstName} {user.lastName})
+            </Link></li>
           </>
         ) : (
           <>

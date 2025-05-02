@@ -13,11 +13,16 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       from: 'bot',
-      text: 'Merhaba! Sana nasıl yardımcı olabilirim?',
-      options: ['Şikayet veya Soru', 'Öneri', 'Yorum'],
+      text: 'Merhaba! Size nasıl yardımcı olabilirim? Aşağıdaki sorulardan birini seçebilirsiniz:',
+      options: [
+        'Sipariş verdim ama ürünüm gelmedi',
+        'Kutudan ne çıkıyor?',
+        'İade veya değişim yapabilir miyim?'
+      ],
       clickable: true
     }
   ]);
+
   const [input, setInput] = useState('');
 
   const handleSend = () => {
@@ -29,40 +34,20 @@ export default function ChatBot() {
   const handleOptionClick = (option) => {
     setMessages(prev => [...prev, { from: 'user', text: option }]);
 
-    if (option === 'Şikayet veya Soru') {
-      setMessages(prev => [
-        ...prev,
-        {
-          from: 'bot',
-          text: 'Lütfen bir seçenek seçin:',
-          options: ['Kargom nerede?', 'Kargom kırık geldi', 'Teslim edilmedi'],
-          clickable: true
-        }
-      ]);
-    } else if (option === 'Öneri') {
+    if (option === 'Sipariş verdim ama ürünüm gelmedi') {
       setMessages(prev => [...prev, {
         from: 'bot',
-        text: 'Önerilerin bizim için çok değerli. Bize destek@sakaoglustore.com adresinden ulaşabilirsin.'
+        text: '📦 Siparişiniz 2-5 iş günü içinde teslim edilmediyse, destek@sakaoglustore.net adresine mail atabilirsiniz.'
       }]);
-    } else if (option === 'Yorum') {
+    } else if (option === 'Kutudan ne çıkıyor?') {
       setMessages(prev => [...prev, {
         from: 'bot',
-        text: 'Yorumunu bizimle paylaştığın için teşekkür ederiz 💬'
+        text: '🎁 Gizemli kutularımızda iPhone, MacBook, kulaklık, ses bombası gibi ürünler bulunabilir. İçerik kutu fiyatına göre değişir.'
       }]);
-    } else if (option === 'Kargom nerede?') {
+    } else if (option === 'İade veya değişim yapabilir miyim?') {
       setMessages(prev => [...prev, {
         from: 'bot',
-        text: 'Kargonuz yola çıktı! Takip numarası: #12345678 📦'
-      }]);
-    } else if (option === 'Kargom kırık geldi') {
-      setMessages(prev => [...prev, {
-        from: 'bot',
-        text: "Üzgünüz! Fotoğrafla destek@sakaoglustore.com'a ulaşın."
-      }]);
-    } else if (option === 'Teslim edilmedi') {
-      setMessages(prev => [...prev, {
-        from: 'bot',
-        text: 'Siparişiniz 2 iş günü içinde ulaşmadıysa bizimle iletişime geçin. Yardımcı olalım!'
+        text: '🔁 Gizemli kutular açıldıktan sonra iade/değişim kapsamına girmez. Ancak ürün arızalıysa iade yapılabilir.'
       }]);
     }
   };
@@ -104,17 +89,16 @@ export default function ChatBot() {
   return (
     <div className={styles.chatbot} style={{ left: position.x, top: position.y }}>
       {isOpen && (
-  <div
-    className={styles.chatWindow}
-    style={{
-      position: 'fixed',
-      top: position.y < window.innerHeight / 2 ? position.y + 60 : 'auto',
-      bottom: position.y >= window.innerHeight / 2 ? window.innerHeight - position.y + 60 : 'auto',
-      left: position.x < window.innerWidth / 2 ? position.x : 'auto',
-      right: position.x >= window.innerWidth / 2 ? window.innerWidth - position.x : 'auto',
-    }}
-  >
-
+        <div
+          className={styles.chatWindow}
+          style={{
+            position: 'fixed',
+            top: position.y < window.innerHeight / 2 ? position.y + 60 : 'auto',
+            bottom: position.y >= window.innerHeight / 2 ? window.innerHeight - position.y + 60 : 'auto',
+            left: position.x < window.innerWidth / 2 ? position.x : 'auto',
+            right: position.x >= window.innerWidth / 2 ? window.innerWidth - position.x : 'auto',
+          }}
+        >
           <div className={styles.messages}>
             {messages.map((msg, i) => (
               <div key={i} className={msg.from === 'bot' ? styles.bot : styles.user}>

@@ -5,7 +5,6 @@ import styles from '@/styles/OrderFlowPage.module.css';
 export default function OrderFlowPage() {
   const [user, setUser] = useState(null);
   const userId = user?.id || user?._id;
-
   const [cartItems, setCartItems] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
@@ -13,6 +12,8 @@ export default function OrderFlowPage() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({ title: '', fullAddress: '' });
+  const [kvkkAccepted, setKvkkAccepted] = useState(false);
+  const [contractAccepted, setContractAccepted] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -31,7 +32,7 @@ export default function OrderFlowPage() {
   }, [user]);
 
   const fetchCart = () => {
-    fetch(`https://api.sakaoglustore.net/api/cart/${userId}`)
+    fetch(`http://localhost:5000/api/cart/${userId}`)
       .then(res => res.json())
       .then(data => {
         const cart = Array.isArray(data) ? data : data.cart || [];
@@ -46,60 +47,76 @@ export default function OrderFlowPage() {
 
   const updateQuantity = (productId, newQty) => {
     if (newQty < 1) return;
-    fetch('https://api.sakaoglustore.net/api/cart/add', {
+    fetch('http://localhost:5000/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: newQty })
-    })
-      .then(res => res.json())
-      .then(() => fetchCart())
-      .catch(err => console.error('❌ Güncelleme Hata:', err));
+    }).then(() => fetchCart());
   };
 
   const removeItem = (productId) => {
-    fetch(`https://api.sakaoglustore.net/api/cart/remove/${userId}/${productId}`, {
+    fetch(`http://localhost:5000/api/cart/remove/${userId}/${productId}`, {
       method: 'DELETE'
-    })
-      .then(res => res.json())
-      .then(() => fetchCart())
-      .catch(err => console.error('❌ Kaldırma Hata:', err));
+    }).then(() => fetchCart());
   };
 
-  const totalPrice = cartItems.reduce((sum, item) => {
-    const price = Number(item.productId?.price) || 0;
-    return sum + price * item.quantity;
-  }, 0);
+  const calcTotals = () => {
+    let totalBoxFee = 0;
+    let totalShipping = 0;
+    let totalVAT = 0;
+    let net = 0;
 
-  const totalBoxes = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const boxFee = totalBoxes * 10;
-  const netPrice = (totalPrice - boxFee) / 1.2;
-  const vat = totalPrice - boxFee - netPrice;
+    cartItems.forEach(item => {
+      const product = item.productId;
+      const qty = item.quantity;
+
+      const price = Number(product.price) || 0;
+      const kdvOrani = Number(product.kdvOrani) || 0;
+      const kutuUcreti = Number(product.kutuUcreti) || 0;
+      const kargoUcreti = Number(product.kargoUcreti) || 0;
+
+      const raw = price * qty;
+      const boxFee = kutuUcreti * qty;
+      const shipping = kargoUcreti * qty;
+      const vat = raw * kdvOrani;
+      const netPrice = raw;
+
+      totalBoxFee += boxFee;
+      totalShipping += shipping;
+      totalVAT += vat;
+      net += netPrice;
+    });
+
+    const finalTotal = net + totalVAT + totalBoxFee + totalShipping;
+
+    return {
+      totalBoxFee,
+      totalShipping,
+      totalVAT,
+      net,
+      finalTotal
+    };
+  };
+
+  const totals = calcTotals();
 
   const handlePurchase = async () => {
-    if (!selectedAddressId) {
-      alert('Lütfen bir adres seçin.');
-      return;
-    }
+    if (!selectedAddressId) return alert('Lütfen bir adres seçin.');
+    if (!kvkkAccepted || !contractAccepted) return alert('Sözleşmeleri onaylamadan devam edemezsiniz.');
 
     try {
-      const quantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-      const res = await fetch(`https://api.sakaoglustore.net/api/box/open-box/${userId}/${selectedAddressId}`, {
+      const orderId = `ORDER-${Date.now()}`;
+      const response = await fetch('http://localhost:5000/api/payment/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ quantity })
+        body: JSON.stringify({ userId, totalAmount: totals.finalTotal.toFixed(2), orderId })
       });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        window.location.href = '/';
-      } else {
-        alert(data.message || 'Sipariş sırasında hata oluştu.');
-      }
+      const html = await response.text();
+      const newWindow = window.open('', '_blank');
+      newWindow.document.write(html);
+      newWindow.document.close();
     } catch (err) {
-      console.error('Satın alma hatası:', err);
-      alert('Sunucu hatası.');
+      alert('Sunucu hatası');
     }
   };
 
@@ -120,13 +137,10 @@ export default function OrderFlowPage() {
 
   const saveAddress = async () => {
     const updatedAddresses = [...addresses];
-    if (editingIndex !== null) {
-      updatedAddresses[editingIndex] = form;
-    } else {
-      updatedAddresses.push(form);
-    }
+    if (editingIndex !== null) updatedAddresses[editingIndex] = form;
+    else updatedAddresses.push(form);
 
-    const res = await fetch(`https://api.sakaoglustore.net/api/user/update-addresses/${userId}`, {
+    const res = await fetch(`http://localhost:5000/api/user/update-addresses/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ addresses: updatedAddresses })
@@ -142,7 +156,7 @@ export default function OrderFlowPage() {
 
   const deleteAddress = async index => {
     const updatedAddresses = addresses.filter((_, i) => i !== index);
-    const res = await fetch(`https://api.sakaoglustore.net/api/user/update-addresses/${userId}`, {
+    const res = await fetch(`http://localhost:5000/api/user/update-addresses/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ addresses: updatedAddresses })
@@ -160,7 +174,6 @@ export default function OrderFlowPage() {
       <div className={styles.orderContainer}>
         <div className={styles.orderLeft}>
           <h2>Alışveriş Tamamlama</h2>
-
           {cartItems.length === 0 ? (
             <p>Sepetiniz boş.</p>
           ) : (
@@ -180,14 +193,13 @@ export default function OrderFlowPage() {
                       <span>{item.quantity}</span>
                       <button onClick={() => updateQuantity(item.productId._id, item.quantity + 1)}>+</button>
                     </div>
-                    <p>Fiyat: {(item.productId.price * item.quantity).toFixed(2)} TL</p>
+                    <p>Fiyat: {totals.finalTotal.toFixed(2)} TL</p>
                   </div>
                 </div>
               ))}
-              <h3>Toplam: {totalPrice.toFixed(2)} TL</h3>
+              <h3>Toplam: {totals.finalTotal.toFixed(2)} TL</h3>
             </div>
           )}
-
           <div className={styles.addressPage}>
             <div className={styles.addressList}>
               {addresses.map((addr, index) => (
@@ -202,25 +214,33 @@ export default function OrderFlowPage() {
                   <h4>{addr.title}</h4>
                   <p>{addr.fullAddress}</p>
                   <div className={styles.actionButtons}>
-                    <button className={styles.addBtn} onClick={(e) => { e.stopPropagation(); handlePopupOpen(index); }}>Düzenle</button>
-                    <button className={styles.addBtn} onClick={(e) => { e.stopPropagation(); deleteAddress(index); }}>Sil</button>
+                    <button onClick={(e) => { e.stopPropagation(); handlePopupOpen(index); }}>Düzenle</button>
+                    <button onClick={(e) => { e.stopPropagation(); deleteAddress(index); }}>Sil</button>
                   </div>
                 </div>
               ))}
-            </div>
-            <div className={styles.actionButtons}>
-              <button className={styles.addBtn} onClick={() => handlePopupOpen()}>Yeni Adres Ekle</button>
+              <button onClick={() => handlePopupOpen()}>Yeni Adres Ekle</button>
             </div>
           </div>
         </div>
-
         <div className={styles.orderSummary}>
           <h3>Fiyat Özeti</h3>
-          <p>Kutu Ücreti: {boxFee.toFixed(2)} TL</p>
-          <p>KDV (%20): {vat.toFixed(2)} TL</p>
-          <p>Net Fiyat: {netPrice.toFixed(2)} TL</p>
+          <p>Kutu Ücreti: {totals.totalBoxFee.toFixed(2)} TL</p>
+          <p>Kargo Ücreti: {totals.totalShipping.toFixed(2)} TL</p>
+          <p>KDV: {totals.totalVAT.toFixed(2)} TL</p>
+          <p>Net Fiyat: {totals.net.toFixed(2)} TL</p>
           <hr />
-          <p><strong>Toplam: {totalPrice.toFixed(2)} TL</strong></p>
+          <p><strong>Toplam: {totals.finalTotal.toFixed(2)} TL</strong></p>
+          <div className={styles.contractChecks}>
+            <label>
+              <input type="checkbox" checked={kvkkAccepted} onChange={e => setKvkkAccepted(e.target.checked)} />
+              <a href="/kvkk" target="_blank"> KVKK Aydınlatma Metni</a>’ni okudum ve kabul ediyorum.
+            </label>
+            <label>
+              <input type="checkbox" checked={contractAccepted} onChange={e => setContractAccepted(e.target.checked)} />
+              <a href="/mesafeli-satis-sozlesmesi" target="_blank"> Mesafeli Satış Sözleşmesi</a>’ni okudum ve kabul ediyorum.
+            </label>
+          </div>
           <button onClick={handlePurchase} className={styles.purchaseBtn}>Satın Al</button>
         </div>
       </div>
@@ -229,21 +249,11 @@ export default function OrderFlowPage() {
         <div className={styles.popup}>
           <div className={styles.popupContent}>
             <h3>{editingIndex !== null ? 'Adresi Düzenle' : 'Yeni Adres Ekle'}</h3>
-            <input
-              name="title"
-              value={form.title}
-              placeholder="Başlık (Ev, İş...)"
-              onChange={handleFormChange}
-            />
-            <textarea
-              name="fullAddress"
-              value={form.fullAddress}
-              placeholder="Adres"
-              onChange={handleFormChange}
-            />
+            <input name="title" value={form.title} placeholder="Başlık (Ev, İş...)" onChange={handleFormChange} />
+            <textarea name="fullAddress" value={form.fullAddress} placeholder="Adres" onChange={handleFormChange} />
             <div className={styles.popupActions}>
-              <button className={styles.saveBtn} onClick={saveAddress}>Kaydet</button>
-              <button className={styles.cancelBtn} onClick={handlePopupClose}>İptal</button>
+              <button onClick={saveAddress}>Kaydet</button>
+              <button onClick={handlePopupClose}>İptal</button>
             </div>
           </div>
         </div>

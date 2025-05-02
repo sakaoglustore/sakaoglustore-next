@@ -24,7 +24,7 @@ export default function Signup() {
       return setMessage('Şifre geçersiz: 1 büyük, 1 küçük harf, sembol ve 6-16 karakter olmalı.');
     }
 
-    const res = await fetch('https://api.sakaoglustore.net/api/auth/signup', {
+    const res = await fetch('http://localhost:5000/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -34,7 +34,7 @@ export default function Signup() {
     setMessage(data.message);
 
     if (res.status === 201) {
-      const loginRes = await fetch('https://api.sakaoglustore.net/api/auth/login', {
+      const loginRes = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ identifier: form.email, password: form.password })
