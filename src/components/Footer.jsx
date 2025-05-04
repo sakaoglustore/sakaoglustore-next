@@ -1,38 +1,30 @@
 'use client';
-import React, { useState } from 'react';
+
+import styles from '@/styles/Footer.module.css';
 import Link from 'next/link';
-import styles from '@/styles/Navbar.module.css';
 
-const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => setMenuOpen(prev => !prev);
-  const closeMenu = () => setMenuOpen(false);
-
+export default function Footer() {
   return (
-    <nav className={styles.navbar}>
-      <Link href="/" className={styles.logo}>
-        sakaoglustore
-      </Link>
+    <footer className={styles.footer}>
+      <div className={styles.footerContainer}>
+        <div className={styles.socialLinks}>
+          <Link href="https://facebook.com" className={styles.socialLink}>Facebook</Link>
+          <Link href="https://twitter.com" className={styles.socialLink}>Twitter</Link>
+          <Link href="https://instagram.com" className={styles.socialLink}>Instagram</Link>
+        </div>
 
-      <button className={styles.menuToggle} onClick={toggleMenu}>
-        ☰
-      </button>
+        <div className={styles.legalLinks}>
+          <Link href="/privacy" className={styles.legalLink}>Gizlilik Politikası</Link>
+          <Link href="/terms" className={styles.legalLink}>Hizmet Şartları</Link>
+          <Link href="/contact" className={styles.legalLink}>İletişim</Link>
+        </div>
 
-      <ul className={`${styles.navLinks} ${menuOpen ? styles.open : ''}`}>
-        <li className={styles.closeBtn} onClick={closeMenu}>×</li>
-        <li><Link href="/about" onClick={closeMenu}>Hakkımızda</Link></li>
-        <li><Link href="/orders" onClick={closeMenu}>Siparişlerim</Link></li>
-        <li><Link href="/profile" onClick={closeMenu}>Profil</Link></li>
-        <li><Link href="/kvkk" onClick={closeMenu}>KVKK Aydınlatma Metni</Link></li>
-        <li>
-          <Link href="/cart" onClick={closeMenu}>
-            <button className={styles.cartBtn}>Sepetim</button>
-          </Link>
-        </li>
-      </ul>
-    </nav>
+        <div className={styles.footerLogo}>
+          <p className={styles.footerText}>
+            SakaogluStore - Tüm hakları saklıdır © {new Date().getFullYear()}
+          </p>
+        </div>
+      </div>
+    </footer>
   );
-};
-
-export default Navbar;
+}

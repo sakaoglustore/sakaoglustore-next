@@ -1,83 +1,53 @@
-/* Sayfa yüksekliğini %100 yapıyoruz */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-/* İçeriği fleks yaparak footer'ı en alta sabitliyoruz */
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Sayfanın içeriği ile footer arasına boşluk bırakır */
-  min-height: 100vh; /* Sayfanın yüksekliği kadar yer kaplar */
-}
-
-/* Footer'ı sabitliyoruz */
 .footer {
-  background-color: var(--bg-dark); /* Arka plan rengi */
-  color: var(--text-light); /* Yazı rengi */
-  padding: 16px 24px;
-  text-align: center;
-  z-index: 9999;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  padding: 16px 32px;
   font-size: 14px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Hafif gölge */
-  position: relative;
   width: 100%;
-  margin-top: auto; /* Footer'ı en alta sabitle */
+  margin-top: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* İçerik kısmı */
-.content {
-  flex-grow: 1; /* İçeriğin büyümesini sağlar */
-}
-
-/* Footer içeriğini hizalama */
 .footerContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
   flex-wrap: wrap;
+  gap: 24px;
 }
 
-.socialLinks,
-.legalLinks {
+.group {
   display: flex;
   gap: 16px;
+  align-items: center;
 }
 
-.socialLink,
-.legalLink {
+.link {
   color: var(--text-light);
   text-decoration: none;
   font-weight: bold;
+  white-space: nowrap;
 }
 
-.socialLink:hover,
-.legalLink:hover {
-  color: var(--secondary-color); /* Hover rengini yeşil yap */
-}
-
-.footerLogo {
-  font-size: 14px;
-  margin-top: 10px;
+.link:hover {
+  color: var(--secondary-color);
 }
 
 .footerText {
-  margin: 0;
-  color: var(--text-light); /* Açık yazı rengi */
+  color: var(--text-light);
+  font-size: 14px;
+  white-space: nowrap;
 }
 
-/* Mobil uyumluluk */
 @media (max-width: 768px) {
   .footerContainer {
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
 
-  .socialLinks,
-  .legalLinks {
-    margin-bottom: 10px;
+  .group {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
