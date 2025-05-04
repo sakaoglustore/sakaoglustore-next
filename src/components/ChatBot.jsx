@@ -1,15 +1,9 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import styles from '@/styles/ChatBot.module.css';
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ x: 20, y: 20 });
-  const [dragging, setDragging] = useState(false);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const [orientation, setOrientation] = useState('bottom-right');
-  const buttonRef = useRef();
-
   const [messages, setMessages] = useState([
     {
       from: 'bot',
@@ -22,7 +16,6 @@ export default function ChatBot() {
       clickable: true
     }
   ]);
-
   const [input, setInput] = useState('');
 
   const handleSend = () => {
@@ -52,53 +45,10 @@ export default function ChatBot() {
     }
   };
 
-  const handleMouseDown = (e) => {
-    setDragging(true);
-    const rect = buttonRef.current.getBoundingClientRect();
-    setOffset({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
-  const handleMouseMove = (e) => {
-    if (dragging) {
-      const newX = e.clientX - offset.x;
-      const newY = e.clientY - offset.y;
-      setPosition({ x: newX, y: newY });
-
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      const horizontal = newX > width / 2 ? 'right' : 'left';
-      const vertical = newY > height / 2 ? 'bottom' : 'top';
-      setOrientation(`${vertical}-${horizontal}`);
-    }
-  };
-
-  const handleMouseUp = () => {
-    setDragging(false);
-  };
-
-  useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [dragging, offset]);
-
   return (
-    <div className={styles.chatbot} style={{ left: position.x, top: position.y }}>
+    <div className={styles.chatbot}>
       {isOpen && (
-        <div
-          className={styles.chatWindow}
-          style={{
-            position: 'fixed',
-            top: position.y < window.innerHeight / 2 ? position.y + 60 : 'auto',
-            bottom: position.y >= window.innerHeight / 2 ? window.innerHeight - position.y + 60 : 'auto',
-            left: position.x < window.innerWidth / 2 ? position.x : 'auto',
-            right: position.x >= window.innerWidth / 2 ? window.innerWidth - position.x : 'auto',
-          }}
-        >
+        <div className={styles.chatWindow}>
           <div className={styles.messages}>
             {messages.map((msg, i) => (
               <div key={i} className={msg.from === 'bot' ? styles.bot : styles.user}>
@@ -132,10 +82,8 @@ export default function ChatBot() {
         </div>
       )}
       <button
-        ref={buttonRef}
         className={styles.fab}
         onClick={() => setIsOpen(!isOpen)}
-        onMouseDown={handleMouseDown}
       >
         💬
       </button>

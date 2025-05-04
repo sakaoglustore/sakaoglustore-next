@@ -25,6 +25,8 @@ export default function Navbar() {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
+  const closeMenu = () => setMenuOpen(false); // Close the menu when clicking on close button
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.logo} onClick={() => router.push('/')}>
@@ -34,7 +36,6 @@ export default function Navbar() {
       <button className={styles['menu-toggle']} onClick={toggleMenu}>
         ☰
       </button>
-      <a href="/kvkk">KVKK Aydınlatma Metni</a>
       <ul className={`${styles['nav-links']} ${menuOpen ? styles.open : ''}`}>
         <li><Link href="/about">Hakkımızda</Link></li>
         <li><button className={styles['cart-btn']} onClick={() => router.push('/order-flow')}>Sepetim</button></li>
@@ -51,6 +52,8 @@ export default function Navbar() {
             <li><Link href="/signup">Kayıt</Link></li>
           </>
         )}
+        <li><Link href="/kvkk">KVKK Aydınlatma Metni</Link></li> {/* Added KVKK Link */}
+        <button className={styles['close-btn']} onClick={closeMenu}>×</button> {/* Close button */}
       </ul>
     </nav>
   );

@@ -1,0 +1,83 @@
+/* Sayfa yüksekliğini %100 yapıyoruz */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* İçeriği fleks yaparak footer'ı en alta sabitliyoruz */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Sayfanın içeriği ile footer arasına boşluk bırakır */
+  min-height: 100vh; /* Sayfanın yüksekliği kadar yer kaplar */
+}
+
+/* Footer'ı sabitliyoruz */
+.footer {
+  background-color: var(--bg-dark); /* Arka plan rengi */
+  color: var(--text-light); /* Yazı rengi */
+  padding: 16px 24px;
+  text-align: center;
+  z-index: 9999;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Hafif gölge */
+  position: relative;
+  width: 100%;
+  margin-top: auto; /* Footer'ı en alta sabitle */
+}
+
+/* İçerik kısmı */
+.content {
+  flex-grow: 1; /* İçeriğin büyümesini sağlar */
+}
+
+/* Footer içeriğini hizalama */
+.footerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.socialLinks,
+.legalLinks {
+  display: flex;
+  gap: 16px;
+}
+
+.socialLink,
+.legalLink {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.socialLink:hover,
+.legalLink:hover {
+  color: var(--secondary-color); /* Hover rengini yeşil yap */
+}
+
+.footerLogo {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.footerText {
+  margin: 0;
+  color: var(--text-light); /* Açık yazı rengi */
+}
+
+/* Mobil uyumluluk */
+@media (max-width: 768px) {
+  .footerContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .socialLinks,
+  .legalLinks {
+    margin-bottom: 10px;
+  }
+}

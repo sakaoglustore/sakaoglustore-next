@@ -1,3 +1,4 @@
+/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -27,6 +28,9 @@
   background: none;
   border: none;
   cursor: pointer;
+  position: absolute;
+  right: 24px;
+  top: 16px;
 }
 
 /* 🌟 Yeni Sepetim Butonu */
@@ -68,31 +72,59 @@
   color: #111827;
 }
 
-/* Mobil Görünüm */
+/* Mobile View: Right-side box style for the nav menu */
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
-    position: absolute;
-    right: 24px;
-    top: 16px;
   }
 
   .nav-links {
     display: none;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
     background-color: #f9fafb;
+    width: 250px; /* Slightly smaller sidebar */
+    height: auto;
     padding: 16px;
-    border-top: 1px solid #e5e7eb;
-    margin-top: 12px;
+    border-left: 1px solid #e5e7eb;
+    box-shadow: -4px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    margin-top: 20px; /* Space for top padding */
   }
 
   .nav-links.open {
     display: flex;
+    transform: translateX(0);
   }
 
   .cart-btn {
     width: 100%;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    color: #111827;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .close-btn:hover {
+    color: #4f46e5;
+  }
+
+  .nav-links a {
+    margin-bottom: 10px; /* Spacing between links */
+  }
+
+  .nav-links a:last-child {
+    margin-bottom: 0;
   }
 }
