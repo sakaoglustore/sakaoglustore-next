@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -24,8 +25,7 @@ export default function Navbar() {
   }, [router.pathname]);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
-
-  const closeMenu = () => setMenuOpen(false); // Close the menu when clicking on close button
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <nav className={styles.navbar}>
@@ -36,15 +36,18 @@ export default function Navbar() {
       <button className={styles['menu-toggle']} onClick={toggleMenu}>
         ☰
       </button>
+
       <ul className={`${styles['nav-links']} ${menuOpen ? styles.open : ''}`}>
         <li><Link href="/about">Hakkımızda</Link></li>
-        <li><button className={styles['cart-btn']} onClick={() => router.push('/order-flow')}>Sepetim</button></li>
+        <li>
+          <button className={styles['cart-btn']} onClick={() => router.push('/order-flow')}>
+            Sepetim
+          </button>
+        </li>
         {user ? (
           <>
             <li><Link href="/order-history">Siparişlerim</Link></li>
-            <li><Link href="/profile">
-              Profil ({user.firstName} {user.lastName})
-            </Link></li>
+            <li><Link href="/profile">Profil ({user.firstName} {user.lastName})</Link></li>
           </>
         ) : (
           <>
@@ -52,8 +55,14 @@ export default function Navbar() {
             <li><Link href="/signup">Kayıt</Link></li>
           </>
         )}
-        <li><Link href="/kvkk">KVKK Aydınlatma Metni</Link></li> {/* Added KVKK Link */}
-        <button className={styles['close-btn']} onClick={closeMenu}>×</button> {/* Close button */}
+        <li><Link href="/kvkk">KVKK Aydınlatma Metni</Link></li>
+
+        {/* Close button only when menu is open */}
+        {menuOpen && (
+          <li>
+            <button className={styles['close-btn']} onClick={closeMenu}>×</button>
+          </li>
+        )}
       </ul>
     </nav>
   );
