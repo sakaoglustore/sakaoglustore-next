@@ -43,6 +43,16 @@ export default function ChatBot() {
         text: '🔁 Gizemli kutular açıldıktan sonra iade/değişim kapsamına girmez. Ancak ürün arızalıysa iade yapılabilir.'
       }]);
     }
+    else if (option === 'Sakaoğlu Store Gizemli Kutusu neden zarar ettirmez?') {
+      setMessages(prev => [...prev, {
+        from: 'bot',
+text: `Sakaoğlu Store, sizlerden gelen yoğun talepler sonucunda ürünleri toptan ve yüklü miktarda tedarik eder. Talep yoğunluğu sayesinde piyasanın %50 altında fiyattan stok alır.
+%20 KDV, %15 yüksek kademe hediyeler, %15 Sakaoğlu Store kazancıdır. 
+Edinilen kazancın yüksek miktarı ile lojistik ve yerli üretim noktasında yatırımlar sağlanır.
+
+Tüm gelir ve giderlerin ekstresi PDF dijital ekstre ve fatura olarak her ay düzenli şekilde topluluğun denetimine açık olarak paylaşılır. Topluluk, tüm giriş çıkışları denetler ve hesaplamalar sonucu tasarrufa giden yolda fikirler veya teklifler verebilir.`,
+      }]);
+    }
   };
 
   return (
