@@ -35,7 +35,7 @@ export default function ChatBot() {
     } else if (option === 'Kutudan ne çıkıyor?') {
       setMessages(prev => [...prev, {
         from: 'bot',
-        text: '🎁 Gizemli kutularımızda iPhone, MacBook, kulaklık, ses bombası gibi ürünler bulunabilir. İçerik kutu fiyatına göre değişir.'
+        text: '🎁 Bluetooth kulaklık, akıllı saat, hoparlör, macbook, iphone serileri, kamp çadırı, blender, airpods, tablet, airfryer, drone, apple vision pro, game box ürünlerinden bir tanesi ile kesin karşılaşırsınız.'
       }]);
     } else if (option === 'İade veya değişim yapabilir miyim?') {
       setMessages(prev => [...prev, {
