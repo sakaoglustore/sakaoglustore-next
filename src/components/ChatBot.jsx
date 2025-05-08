@@ -11,7 +11,8 @@ export default function ChatBot() {
       options: [
         'Sipariş verdim ama ürünüm gelmedi',
         'Kutudan ne çıkıyor?',
-        'İade veya değişim yapabilir miyim?'
+        'İade veya değişim yapabilir miyim?',
+        'Sakaoğlu Store Gizemli Kutusu neden zarar ettirmez?'
       ],
       clickable: true
     }
