@@ -13,7 +13,7 @@ export default function OrderHistoryPage() {
   
     const userId = user.id || user._id; // ✅ Hataları engeller
   
-    axios.get(`https://api.sakaoglustore.net/api/user/orders/${userId}`)
+    axios.get(`http://localhost:5000/api/user/orders/${userId}`)
       .then(res => {
         const orders = res.data;
         const grouped = {};
@@ -102,7 +102,13 @@ export default function OrderHistoryPage() {
                   <span style={{ color: 'red', fontWeight: 'bold' }}>İptal Edildi</span>
                 ) : (
                   <a href={group.trackingNumber} target="_blank" rel="noreferrer">
-                    {extractTrackingNumber(group.trackingNumber) || "Takip bağlantısı yok"}
+                    {group.jobId ? (
+                      <a href={`https://selfservis.yurticikargo.com/reports/SSWDocumentResults.aspx?jobId=${group.jobId}`} target="_blank" rel="noopener noreferrer">
+                        Kargoyu Takip Et
+                      </a>
+                    ) : (
+                      <span>Takip bağlantısı yok</span>
+                    )}
                   </a>
                 )}
               </p>

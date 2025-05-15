@@ -8,14 +8,12 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.footerContainer}>
         <div className={styles.socialLinks}>
-          <Link href="https://facebook.com" className={styles.socialLink}>Facebook</Link>
-          <Link href="https://twitter.com" className={styles.socialLink}>Twitter</Link>
-          <Link href="https://instagram.com" className={styles.socialLink}>Instagram</Link>
+          <Link href="https://www.instagram.com/sakaoglu.store/?hl=en" className={styles.socialLink}>Instagram</Link>
         </div>
 
         <div className={styles.legalLinks}>
-          <Link href="/privacy" className={styles.legalLink}>Gizlilik Politikası</Link>
-          <Link href="/terms" className={styles.legalLink}>Hizmet Şartları</Link>
+          <Link href="/privacy-policy" className={styles.legalLink}>Gizlilik Politikası  |  </Link>
+          <Link href="/terms-of-service" className={styles.legalLink}>Hizmet Şartları  |  </Link>
           <Link href="/contact" className={styles.legalLink}>İletişim</Link>
         </div>
 

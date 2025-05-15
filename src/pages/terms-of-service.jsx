@@ -1,44 +1,51 @@
+'use client';
 import React from 'react';
-import styles from '@/styles/TermsOfService.module.css'; // CSS modül dosyasını içe aktar
+import styles from '@/styles/TermsOfService.module.css';
 
 const TermsOfService = () => {
   return (
-    <div className="container">
-      <h1>Hizmet Şartları</h1>
-      <section>
-        <h2>1. Hizmetin Sunumu</h2>
-        <p>
-          Web sitemiz, kullanıcıların çeşitli hizmetlere erişim sağlamalarını amaçlayan bir platformdur. Hizmetler, zaman zaman değişiklik gösterebilir ve siteye erişiminiz, bu değişikliklere bağlı olarak da farklılık gösterebilir.
+    <div className={styles.container}>
+      <h1 className={styles.title}>Hizmet Şartları</h1>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>1. Hizmetin Sunumu</h2>
+        <p className={styles.text}>
+          Web sitemiz, kullanıcıların çeşitli hizmetlere erişim sağlamalarını amaçlayan bir platformdur. Hizmetler zamanla değişebilir.
         </p>
       </section>
-      <section>
-        <h2>2. Hesap Güvenliği</h2>
-        <p>
-          Kullanıcılar, hesaplarının güvenliğinden sorumludur. Hesabınızla yapılan işlemler, sizin sorumluluğunuzdadır. Hesabınıza izinsiz erişim olduğunu düşünüyorsanız, derhal bizimle iletişime geçmelisiniz.
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>2. Hesap Güvenliği</h2>
+        <p className={styles.text}>
+          Kullanıcılar, hesaplarının güvenliğinden ve hesapları üzerinden yapılan işlemlerden sorumludur.
         </p>
       </section>
-      <section>
-        <h2>3. Kullanıcı Davranışı</h2>
-        <p>
-          Web sitemizi kullanırken, yasadışı, saldırgan, yanıltıcı, cinsel içerikli, nefret söylemi içeren veya üçüncü şahıslara zarar veren herhangi bir içerik yayınlayamazsınız. Bu tür davranışlar, kullanıcı erişiminizin kısıtlanmasına veya askıya alınmasına yol açabilir.
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>3. Kullanıcı Davranışı</h2>
+        <p className={styles.text}>
+          Web sitemizi kullanırken yasa dışı, saldırgan veya yanıltıcı içerikler paylaşamazsınız. Bu tür davranışlar erişiminizin engellenmesine sebep olabilir.
         </p>
       </section>
-      <section>
-        <h2>4. Fikri Mülkiyet</h2>
-        <p>
-          Web sitemiz üzerindeki tüm içerikler, yazılımlar ve tasarımlar telif hakkıyla korunmaktadır. Kullanıcılar, bu içerikleri yalnızca belirli izinlerle kullanabilirler.
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>4. Fikri Mülkiyet</h2>
+        <p className={styles.text}>
+          Web sitemizdeki tüm içerikler telif hakkı ile korunmaktadır. İçerikler izinsiz kullanılamaz.
         </p>
       </section>
-      <section>
-        <h2>5. Sorumluluk Reddi</h2>
-        <p>
-          Web sitemiz, sağladığı hizmetlerin kesintisiz ve hatasız olacağını garanti etmemektedir. Kullanıcılar, siteyi kullanırken ortaya çıkabilecek olası kayıplardan kendi sorumlulukları altındadır.
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>5. Sorumluluk Reddi</h2>
+        <p className={styles.text}>
+          Web sitemiz, hizmetlerin kesintisiz veya hatasız olacağını garanti etmemektedir. Kullanım riskleri kullanıcıya aittir.
         </p>
       </section>
-      <section>
-        <h2>6. Değişiklikler</h2>
-        <p>
-          Bu hizmet şartları, zaman zaman güncellenebilir. Bu değişiklikler, web sitesinde yayımlandığı tarihten itibaren geçerlidir. Kullanıcılar, bu şartları düzenli olarak kontrol etmelidir.
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>6. Değişiklikler</h2>
+        <p className={styles.text}>
+          Hizmet şartları zaman zaman güncellenebilir. Değişiklikler yayım tarihinden itibaren geçerli olur.
         </p>
       </section>
     </div>

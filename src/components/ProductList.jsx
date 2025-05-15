@@ -1,4 +1,3 @@
-
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -7,18 +6,22 @@ import styles from '@/styles/ProductList.module.css';
 export default function ProductList({ category }) {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({});
+  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    fetch('https://api.sakaoglustore.net/api/gifts/all')
+    fetch('http://localhost:5000/api/gifts/all')
       .then(res => res.json())
       .then(data => setProducts(data))
-      .catch(err => console.log(err));
+      .catch(err => console.error('Product Fetch Error:', err));
 
     const user = JSON.parse(localStorage.getItem('user'));
-    const userId = user?.id || user?._id;
-    if (userId) {
-      fetch(`https://api.sakaoglustore.net/api/cart/${userId}`)
+    const id = user?.id || user?._id;
+    if (id) {
+      setUserId(id);
+      fetch(`http://localhost:5000/api/cart/${id}`)
         .then(res => res.json())
         .then(data => {
           const qtyMap = {};
@@ -32,29 +35,26 @@ export default function ProductList({ category }) {
   }, [category]);
 
   const updateCart = (productId, newQty) => {
+    if (!userId) {
+      setShowLoginPopup(true);
+      return;
+    }
+
     const updated = { ...cart };
     if (newQty <= 0) delete updated[productId];
     else updated[productId] = newQty;
     setCart(updated);
 
-    const user = JSON.parse(localStorage.getItem('user'));
-    const userId = user?._id || user?.id;
-
-    if (!userId || !productId) {
-      console.error('❌ Eksik userId veya productId');
-      return;
-    }
-
-    fetch('https://api.sakaoglustore.net/api/cart/add', {
+    fetch('http://localhost:5000/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: newQty })
     })
       .then(res => res.json())
       .then(data => {
-        if (data.message) console.log('✅ Sepet Güncellendi:', data.message);
+        if (data.message) console.log('Sepet Güncellendi:', data.message);
       })
-      .catch(err => console.error('❌ Sepet Güncellenemedi:', err));
+      .catch(err => console.error('Sepet Güncellenemedi:', err));
   };
 
   const calculateFullPrice = (p) => {
@@ -65,24 +65,31 @@ export default function ProductList({ category }) {
     return price + price * kdv + kutuUcreti + kargoUcreti;
   };
 
+  const closePopup = () => setShowLoginPopup(false);
+
   return (
-    <div className={styles.productList || 'product-list'}>
+    <div className={styles.productList}>
       <h2>{category} Kategorisindeki Ürünler</h2>
-      <div className={styles.products || 'products'}>
+      <div className={styles.products}>
         {products.map(p => {
           const qty = cart[p._id] || 0;
           const unitPrice = calculateFullPrice(p);
           const totalPrice = unitPrice * qty;
 
           return (
-            <div className={styles.productCard || 'product-card'} key={p._id}>
+            <div
+              key={p._id}
+              className={styles.productCard}
+              onMouseEnter={() => setHoveredProduct(p._id)}
+              onMouseLeave={() => setHoveredProduct(null)}
+            >
               <img src={p.image} alt={p.name} />
               <h4>{p.name}</h4>
               <p>{p.description}</p>
-              <p className={styles.price || 'price'}>Birim Fiyat: {unitPrice.toFixed(2)} TL</p>
-              {qty > 0 && <p>Toplam: {(totalPrice).toFixed(2)} TL</p>}
+              <p className={styles.price}>Birim Fiyat: {unitPrice.toFixed(2)} TL</p>
+              {qty > 0 && <p>Toplam: {totalPrice.toFixed(2)} TL</p>}
 
-              <div className={styles['quantity-control'] || 'quantity-control'}>
+              <div className={styles.quantityControl}>
                 <button onClick={() => updateCart(p._id, Math.max(qty - 1, 0))} disabled={qty === 0}>-</button>
                 <span>{qty}</span>
                 <button onClick={() => updateCart(p._id, qty + 1)}>+</button>
@@ -93,14 +100,42 @@ export default function ProductList({ category }) {
                   Sepete Git
                 </button>
               ) : (
-                <button className={styles.buyBtn || 'buy-btn'} onClick={() => updateCart(p._id, 1)}>
+                <button className={styles.buyBtn} onClick={() => updateCart(p._id, 1)}>
                   Sepete Ekle
                 </button>
+              )}
+
+              {hoveredProduct === p._id && (
+                <div className={styles.productHoverInfo}>
+                  <h4>Neler çıkabilir?</h4>
+                  <ul>
+                    {p.whatInside
+                      ? p.whatInside.split(',').map((item, idx) => (
+                          <li key={idx}>{item.trim()}</li>
+                        ))
+                      : <li>Bilgi bulunamadı</li>}
+                  </ul>
+                  <p>ürünlerinden bir tanesi ile kesin karşılaşırsınız</p>
+                </div>
               )}
             </div>
           );
         })}
       </div>
+
+      {/* Login Popup */}
+      {showLoginPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popupContent}>
+            <h3>Ürün eklemek için giriş yapmalısınız</h3>
+            <p>Hesabınız var mı?{' '}
+              <span onClick={() => router.push('/login')} className={styles.link}>Giriş Yap</span> |{' '}
+              <span onClick={() => router.push('/signup')} className={styles.link}>Kayıt Ol</span>
+            </p>
+            <button onClick={closePopup} className={styles.closeBtn}>Kapat</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

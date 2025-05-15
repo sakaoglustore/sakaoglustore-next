@@ -1,21 +1,23 @@
+'use client';
 import React from 'react';
+import styles from '@/styles/ContactUs.module.css';
 
 const ContactUs = () => {
   return (
-    <div className="container">
-      <h1>İletişim</h1>
-      <section>
-        <h2>Bizimle iletişime geçmek için aşağıdaki yöntemleri kullanabilirsiniz:</h2>
-        <ul>
-          <li><strong>Telefon:</strong> +90 541 614 20 17</li>
-          <li><strong>E-posta:</strong> eyilerege@gmail.com</li>
-          <li><strong>Adres:</strong> Yeşilbahçe Mah. 1450 Sok. Dr. Eyiler Apt. No: 25/25, [Şehir Adı, Ülke]</li>
+    <div className={styles.container}>
+      <h1 className={styles.title}>İletişim</h1>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Bize Ulaşın</h2>
+        <ul className={styles.list}>
+          <li className={styles.listItem}><strong>E-posta:</strong> info@sakaoglustore.net</li>
         </ul>
       </section>
-      <section>
-        <h2>Yardım ve Destek</h2>
-        <p>
-          Eğer herhangi bir konuda yardıma ihtiyacınız varsa ya da hizmetlerimizle ilgili sorularınız varsa, lütfen bizimle iletişime geçmekten çekinmeyin. Sizi dinlemekten memnuniyet duyarız!
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Yardım ve Destek</h2>
+        <p className={styles.text}>
+          Hizmetlerimizle ilgili sorularınız için bizimle iletişime geçmekten çekinmeyin. Size yardımcı olmaktan memnuniyet duyarız!
         </p>
       </section>
     </div>

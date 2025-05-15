@@ -13,7 +13,8 @@ export default function OrderFlowPage() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({ title: '', fullAddress: '' });
   const [kvkkAccepted, setKvkkAccepted] = useState(false);
-  const [contractAccepted, setContractAccepted] = useState(false);
+  const [mesafeliAccepted, setMesafeliAccepted] = useState(false);
+const [popupType, setPopupType] = useState(null); 
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -32,7 +33,7 @@ export default function OrderFlowPage() {
   }, [user]);
 
   const fetchCart = () => {
-    fetch(`https://api.sakaoglustore.net/api/cart/${userId}`)
+    fetch(`http://localhost:5000/api/cart/${userId}`)
       .then(res => res.json())
       .then(data => {
         const cart = Array.isArray(data) ? data : data.cart || [];
@@ -43,21 +44,6 @@ export default function OrderFlowPage() {
 
   const fetchAddresses = () => {
     setAddresses(user?.addresses || []);
-  };
-
-  const updateQuantity = (productId, newQty) => {
-    if (newQty < 1) return;
-    fetch('https://api.sakaoglustore.net/api/cart/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, productId, quantity: newQty })
-    }).then(() => fetchCart());
-  };
-
-  const removeItem = (productId) => {
-    fetch(`https://api.sakaoglustore.net/api/cart/remove/${userId}/${productId}`, {
-      method: 'DELETE'
-    }).then(() => fetchCart());
   };
 
   const calcTotals = () => {
@@ -100,31 +86,84 @@ export default function OrderFlowPage() {
 
   const totals = calcTotals();
 
-  const handlePurchase = async () => {
-    if (!selectedAddressId) return alert('Lütfen bir adres seçin.');
-    if (!kvkkAccepted || !contractAccepted) return alert('Sözleşmeleri onaylamadan devam edemezsiniz.');
-
-    try {
-      const orderId = `ORDER-${Date.now()}`;
-      const response = await fetch('https://api.sakaoglustore.net/api/payment/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, totalAmount: totals.finalTotal.toFixed(2), orderId })
-      });
-      const html = await response.text();
-      const newWindow = window.open('', '_blank');
-      newWindow.document.write(html);
-      newWindow.document.close();
-    } catch (err) {
-      alert('Sunucu hatası');
-    }
+  const updateQuantity = (productId, newQty) => {
+    if (newQty < 1) return;
+    fetch('http://localhost:5000/api/cart/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, productId, quantity: newQty })
+    }).then(() => fetchCart());
   };
 
-  const handlePopupOpen = (index = null) => {
-    setEditingIndex(index);
-    setForm(index !== null ? addresses[index] : { title: '', fullAddress: '' });
+  const removeItem = (productId) => {
+    fetch(`http://localhost:5000/api/cart/remove/${userId}/${productId}`, {
+      method: 'DELETE'
+    }).then(() => fetchCart());
+  };
+
+const handlePurchase = async () => {
+  if (!userId) {
+    setPopupType('login-purchase');
     setPopupVisible(true);
-  };
+    return;
+  }
+  if (!selectedAddressId) {
+    alert('Lütfen bir adres seçin.');
+    return;
+  }
+
+  if (!kvkkAccepted || !mesafeliAccepted) {
+    alert('Lütfen KVKK ve Mesafeli Satış sözleşmelerini kabul edin.');
+    return;
+  }
+
+  try {
+    const quantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+    // 1) Siparişi kendi backendine gönder
+    const orderRes = await fetch(`http://localhost:5000/api/box/open-box/${userId}/${selectedAddressId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quantity })
+    });
+
+    const orderData = await orderRes.json();
+
+    if (!orderRes.ok) {
+      alert(orderData.message || 'Sipariş sırasında hata oluştu.');
+      return;
+    }
+
+    // 2) Başarılı olursa: SEPETİ TEMİZLE
+    await fetch(`http://localhost:5000/api/cart/clear/${userId}`, {
+      method: 'DELETE'
+    });
+
+    // 3) Localde de sepeti sıfırla
+    setCartItems([]);
+
+    // 4) Başarılı mesajı ve yönlendirme
+    alert('Siparişiniz başarıyla alındı!');
+    window.location.href = '/order-history';
+
+  } catch (err) {
+    console.error('Satın alma hatası:', err);
+    alert('Sunucu hatası.');
+  }
+};
+
+const handlePopupOpen = (index = null) => {
+  if (!user) {
+    setPopupType('login-required');
+    setPopupVisible(true);
+    return;
+  }
+
+  setEditingIndex(index);
+  setForm(index !== null ? addresses[index] : { title: '', fullAddress: '', city: '', district: '', phone: '' });
+  setPopupType('address-form');
+  setPopupVisible(true);
+};
 
   const handlePopupClose = () => {
     setPopupVisible(false);
@@ -136,38 +175,35 @@ export default function OrderFlowPage() {
   };
 
   const saveAddress = async () => {
-    const updatedAddresses = [...addresses];
-    if (editingIndex !== null) updatedAddresses[editingIndex] = form;
-    else updatedAddresses.push(form);
+  if (!form.title || !form.city || !form.district || !form.fullAddress || !form.phone || !user?._id) {
+    alert('Lütfen tüm alanları doldurun.');
+    return;
+  }
 
-    const res = await fetch(`https://api.sakaoglustore.net/api/user/update-addresses/${userId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ addresses: updatedAddresses })
-    });
+  const url = editingIndex !== null
+    ? `http://localhost:5000/api/user/address/update/${user._id}/${editingIndex}`
+    : `http://localhost:5000/api/user/address/add/${user._id}`;
 
-    const data = await res.json();
-    if (res.ok) {
-      setAddresses(data.updatedUser.addresses);
-      localStorage.setItem('user', JSON.stringify(data.updatedUser));
-      handlePopupClose();
-    }
-  };
+  const method = editingIndex !== null ? 'PUT' : 'POST';
 
-  const deleteAddress = async index => {
-    const updatedAddresses = addresses.filter((_, i) => i !== index);
-    const res = await fetch(`https://api.sakaoglustore.net/api/user/update-addresses/${userId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ addresses: updatedAddresses })
-    });
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form)
+  });
 
-    const data = await res.json();
-    if (res.ok) {
-      setAddresses(data.updatedUser.addresses);
-      localStorage.setItem('user', JSON.stringify(data.updatedUser));
-    }
-  };
+  const data = await res.json();
+  if (res.ok) {
+    const updatedUser = { ...user, addresses: data.addresses };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+    setAddresses(data.addresses);
+    handlePopupClose();
+  } else {
+    alert(data.message || 'İşlem başarısız.');
+  }
+};
+
 
   return (
     <div className={styles.orderFlowPage}>
@@ -215,7 +251,6 @@ export default function OrderFlowPage() {
                   <p>{addr.fullAddress}</p>
                   <div className={styles.actionButtons}>
                     <button onClick={(e) => { e.stopPropagation(); handlePopupOpen(index); }}>Düzenle</button>
-                    <button onClick={(e) => { e.stopPropagation(); deleteAddress(index); }}>Sil</button>
                   </div>
                 </div>
               ))}
@@ -231,33 +266,106 @@ export default function OrderFlowPage() {
           <p>Net Fiyat: {totals.net.toFixed(2)} TL</p>
           <hr />
           <p><strong>Toplam: {totals.finalTotal.toFixed(2)} TL</strong></p>
-          <div className={styles.contractChecks}>
-            <label>
-              <input type="checkbox" checked={kvkkAccepted} onChange={e => setKvkkAccepted(e.target.checked)} />
-              <a href="/kvkk" target="_blank"> KVKK Aydınlatma Metni</a>’ni okudum ve kabul ediyorum.
-            </label>
-            <label>
-              <input type="checkbox" checked={contractAccepted} onChange={e => setContractAccepted(e.target.checked)} />
-              <a href="/mesafeli-satis-sozlesmesi" target="_blank"> Mesafeli Satış Sözleşmesi</a>’ni okudum ve kabul ediyorum.
-            </label>
-          </div>
-          <button onClick={handlePurchase} className={styles.purchaseBtn}>Satın Al</button>
-        </div>
-      </div>
+          <div style={{ marginBottom: '10px' }}>
+  <label>
+    <input
+      type="checkbox"
+      checked={kvkkAccepted}
+      onChange={() => setKvkkAccepted(!kvkkAccepted)}
+    />{' '}
+    KVKK Aydınlatma Metnini okudum ve kabul ediyorum.
+  </label>
+</div>
 
-      {popupVisible && (
-        <div className={styles.popup}>
-          <div className={styles.popupContent}>
-            <h3>{editingIndex !== null ? 'Adresi Düzenle' : 'Yeni Adres Ekle'}</h3>
-            <input name="title" value={form.title} placeholder="Başlık (Ev, İş...)" onChange={handleFormChange} />
-            <textarea name="fullAddress" value={form.fullAddress} placeholder="Adres" onChange={handleFormChange} />
-            <div className={styles.popupActions}>
-              <button onClick={saveAddress}>Kaydet</button>
-              <button onClick={handlePopupClose}>İptal</button>
-            </div>
+<div style={{ marginBottom: '20px' }}>
+  <label>
+    <input
+      type="checkbox"
+      checked={mesafeliAccepted}
+      onChange={() => setMesafeliAccepted(!mesafeliAccepted)}
+    />{' '}
+    Mesafeli Satış Sözleşmesini okudum ve kabul ediyorum.
+  </label>
+</div>
+
+<button
+  onClick={handlePurchase}
+  className={styles.purchaseBtn}
+  disabled={!(kvkkAccepted && mesafeliAccepted)}
+>
+  Satın Al
+</button>        </div>
+{popupVisible && (
+  <div className={styles.popupOverlay}>
+    <div className={styles.popupContent}>
+      {popupType === 'login-required' ? (
+        <>
+          <h3>İşlem yapmak için giriş yapmanız gerekiyor</h3>
+          <p>
+            Hesabınız var mı?{' '}
+            <span onClick={() => { window.location.href = '/login'; }} className={styles.link}>Giriş Yap</span> |{' '}
+            <span onClick={() => { window.location.href = '/signup'; }} className={styles.link}>Kayıt Ol</span>
+          </p>
+          <button onClick={() => setPopupVisible(false)} className={styles.closeBtn}>Kapat</button>
+        </>
+      ): popupType === 'address-form' ? (
+        <>
+          <h3>{editingIndex !== null ? 'Adres Düzenle' : 'Yeni Adres Ekle'}</h3>
+          <input
+            name="title"
+            value={form.title}
+            onChange={handleFormChange}
+            placeholder="Başlık (Ev/İş)"
+          />
+          <input
+            name="city"
+            value={form.city}
+            onChange={handleFormChange}
+            placeholder="İl"
+          />
+          <input
+            name="district"
+            value={form.district}
+            onChange={handleFormChange}
+            placeholder="İlçe"
+          />
+          <textarea
+            name="fullAddress"
+            value={form.fullAddress}
+            onChange={handleFormChange}
+            placeholder="Adres"
+          />
+          <input
+            name="phone"
+            value={form.phone}
+            onChange={handleFormChange}
+            placeholder="Telefon (5xx xxx xxxx)"
+          />
+          <div className={styles.popupActions}>
+            <button onClick={saveAddress}>Kaydet</button>
+            <button onClick={() => setPopupVisible(false)} className={styles.cancelBtn}>
+              İptal
+            </button>
           </div>
-        </div>
+        </>
+      ): null}
+
+      {popupType === 'login-purchase' && (
+        <>
+          <h3>İşlem yapmak için giriş yapmanız gerekiyor</h3>
+          <p>
+            Hesabınız var mı?{' '}
+            <span onClick={() => { window.location.href = '/login'; }} className={styles.link}>Giriş Yap</span> |{' '}
+            <span onClick={() => { window.location.href = '/signup'; }} className={styles.link}>Kayıt Ol</span>
+          </p>
+          <button onClick={() => setPopupVisible(false)} className={styles.closeBtn}>Kapat</button>
+        </>
       )}
+    </div>
+  </div>
+)}
+
+      </div>
     </div>
   );
 }

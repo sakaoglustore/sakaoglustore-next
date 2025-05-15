@@ -1,3 +1,5 @@
+// AddressManager.jsx
+'use client';
 import { useEffect, useState } from 'react';
 import styles from '@/styles/ProfilePage.module.css';
 
@@ -6,7 +8,7 @@ export function AddressManager() {
   const [addresses, setAddresses] = useState([]);
   const [popupOpen, setPopupOpen] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-  const [form, setForm] = useState({ title: '', fullAddress: '' });
+  const [form, setForm] = useState({ title: '', city: '', district: '', fullAddress: '', phone: '' });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -18,9 +20,9 @@ export function AddressManager() {
 
   useEffect(() => {
     const fetchAddresses = async () => {
-      if (!user?.id) return;
+      if (!user?._id) return;
       try {
-        const res = await fetch(`https://api.sakaoglustore.net/api/user/addresses/${user.id}`);
+        const res = await fetch(`http://localhost:5000/api/user/addresses/${user._id}`);
         const data = await res.json();
         if (res.ok) {
           setAddresses(data.addresses);
@@ -34,28 +36,44 @@ export function AddressManager() {
     };
 
     fetchAddresses();
-  }, [user?.id]);
+  }, [user?._id]);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const openAddPopup = () => {
-    setForm({ title: '', fullAddress: '' });
+    setForm({ title: '', city: '', district: '', fullAddress: '' });
     setEditIndex(null);
     setPopupOpen(true);
   };
 
   const openEditPopup = (index) => {
-    setForm(addresses[index]);
+    const addr = addresses[index];
+    setForm({
+      title: addr.title || '',
+      city: addr.city || '',
+      district: addr.district || '',
+      fullAddress: addr.fullAddress || '',
+      phone: addr.phone || ''
+    });
     setEditIndex(index);
     setPopupOpen(true);
   };
 
   const saveAddress = async () => {
-    if (!form.title || !form.fullAddress || !user?.id) return;
+    if (!form.title || !form.city || !form.district || !form.fullAddress || !user?._id) {
+      alert('Lütfen tüm alanları doldurun.');
+      return;
+    }
+    const phoneRegex = /^5\d{2}\s?\d{3}\s?\d{4}$/;
+
+    if (!phoneRegex.test(form.phone)) {
+      alert('Telefon numarası 5xx xxx xxxx formatında olmalıdır (başında sıfır yok).');
+      return;
+    }
 
     const url = editIndex !== null
-      ? `https://api.sakaoglustore.net/api/user/address/update/${user.id}/${editIndex}`
-      : `https://api.sakaoglustore.net/api/user/address/add/${user.id}`;
+      ? `http://localhost:5000/api/user/address/update/${user._id}/${editIndex}`
+      : `http://localhost:5000/api/user/address/add/${user._id}`;
 
     const method = editIndex !== null ? 'PUT' : 'POST';
 
@@ -67,16 +85,18 @@ export function AddressManager() {
 
     const data = await res.json();
     if (res.ok) updateUser(data.addresses);
+    else alert(data.message || 'İşlem başarısız.');
     setPopupOpen(false);
   };
 
   const deleteAddress = async (index) => {
-    if (!user?.id) return;
-    const res = await fetch(`https://api.sakaoglustore.net/api/user/address/delete/${user.id}/${index}`, {
+    if (!user?._id) return;
+    const res = await fetch(`http://localhost:5000/api/user/address/delete/${user._id}/${index}`, {
       method: 'DELETE'
     });
     const data = await res.json();
     if (res.ok) updateUser(data.addresses);
+    else alert(data.message || 'Silinemedi.');
   };
 
   const updateUser = (updatedAddresses) => {
@@ -92,6 +112,7 @@ export function AddressManager() {
       {addresses.map((addr, i) => (
         <div key={i} className={styles['address-item']}>
           <strong>{addr.title}</strong><br />
+          {addr.city}, {addr.district}<br />
           {addr.fullAddress}
           <div className={styles['btn-group']}>
             <button onClick={() => openEditPopup(i)}>Düzenle</button>
@@ -106,7 +127,15 @@ export function AddressManager() {
           <div className={styles['popup-content']}>
             <h3>{editIndex !== null ? 'Adres Düzenle' : 'Yeni Adres Ekle'}</h3>
             <input name="title" placeholder="Başlık (Ev/İş)" value={form.title} onChange={handleChange} />
+            <input name="city" placeholder="İl" value={form.city} onChange={handleChange} />
+            <input name="district" placeholder="İlçe" value={form.district} onChange={handleChange} />
             <textarea name="fullAddress" placeholder="Adres" value={form.fullAddress} onChange={handleChange} />
+            <input
+              name="phone"
+              placeholder="Telefon (5xx xxx xxxx)"
+              value={form.phone}
+              onChange={handleChange}
+            />
             <div className={styles['popup-actions']}>
               <button onClick={saveAddress}>Kaydet</button>
               <button onClick={() => setPopupOpen(false)}>İptal</button>
