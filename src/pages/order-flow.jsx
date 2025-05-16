@@ -1,8 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import styles from '@/styles/OrderFlowPage.module.css';
 
 export default function OrderFlowPage() {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const userId = user?.id || user?._id;
   const [cartItems, setCartItems] = useState([]);
@@ -117,39 +119,14 @@ const handlePurchase = async () => {
     return;
   }
 
-  try {
-    const quantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-    // 1) Siparişi kendi backendine gönder
-    const orderRes = await fetch(`https://api.sakaoglustore.net/api/box/open-box/${userId}/${selectedAddressId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quantity })
-    });
-
-    const orderData = await orderRes.json();
-
-    if (!orderRes.ok) {
-      alert(orderData.message || 'Sipariş sırasında hata oluştu.');
-      return;
+  // Ödeme sayfasına yönlendir ve gerekli bilgileri state olarak aktar
+  router.push({
+    pathname: '/checkout',
+    query: {
+      total: totals.finalTotal,
+      addressId: selectedAddressId
     }
-
-    // 2) Başarılı olursa: SEPETİ TEMİZLE
-    await fetch(`https://api.sakaoglustore.net/api/cart/clear/${userId}`, {
-      method: 'DELETE'
-    });
-
-    // 3) Localde de sepeti sıfırla
-    setCartItems([]);
-
-    // 4) Başarılı mesajı ve yönlendirme
-    alert('Siparişiniz başarıyla alındı!');
-    window.location.href = '/order-history';
-
-  } catch (err) {
-    console.error('Satın alma hatası:', err);
-    alert('Sunucu hatası.');
-  }
+  });
 };
 
 const handlePopupOpen = (index = null) => {
