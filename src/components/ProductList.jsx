@@ -12,7 +12,7 @@ export default function ProductList({ category }) {
   const router = useRouter();
 
   useEffect(() => {
-    fetch('https://api.sakaoglustore.net/api/gifts/all')
+    fetch('http://localhost:5000/api/gifts/all')
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error('Product Fetch Error:', err));
@@ -21,7 +21,7 @@ export default function ProductList({ category }) {
     const id = user?.id || user?._id;
     if (id) {
       setUserId(id);
-      fetch(`https://api.sakaoglustore.net/api/cart/${id}`)
+      fetch(`http://localhost:5000/api/cart/${id}`)
         .then(res => res.json())
         .then(data => {
           const qtyMap = {};
@@ -45,7 +45,7 @@ export default function ProductList({ category }) {
     else updated[productId] = newQty;
     setCart(updated);
 
-    fetch('https://api.sakaoglustore.net/api/cart/add', {
+    fetch('http://localhost:5000/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: newQty })
@@ -66,6 +66,9 @@ export default function ProductList({ category }) {
   };
 
   const closePopup = () => setShowLoginPopup(false);
+  const goToProductDetail = (productId) => {
+    router.push(`/product/${productId}`);
+  };
 
   return (
     <div className={styles.productList}>
@@ -83,11 +86,15 @@ export default function ProductList({ category }) {
               onMouseEnter={() => setHoveredProduct(p._id)}
               onMouseLeave={() => setHoveredProduct(null)}
             >
-              <img src={p.image} alt={p.name} />
-              <h4>{p.name}</h4>
-              <p>{p.description}</p>
-              <p className={styles.price}>Birim Fiyat: {unitPrice.toFixed(2)} TL</p>
-              {qty > 0 && <p>Toplam: {totalPrice.toFixed(2)} TL</p>}
+              <div 
+                className={styles.productInfo} 
+                onClick={() => goToProductDetail(p._id)}
+              >
+                <img src={p.image} alt={p.name} />
+                <h4>{p.name}</h4>
+                <p className={styles.price}>Birim Fiyat: {unitPrice.toFixed(2)} TL</p>
+                {qty > 0 && <p>Toplam: {totalPrice.toFixed(2)} TL</p>}
+              </div>
 
               <div className={styles.quantityControl}>
                 <button onClick={() => updateCart(p._id, Math.max(qty - 1, 0))} disabled={qty === 0}>-</button>
