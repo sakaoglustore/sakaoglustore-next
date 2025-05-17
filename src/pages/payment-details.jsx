@@ -1,3 +1,4 @@
+// src/pages/payment-details.jsx
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -6,15 +7,18 @@ import styles from '@/styles/PaymentDetails.module.css';
 export default function PaymentDetails() {
   const router = useRouter();
   const { orderId, total } = router.query;
-  const [orderInfo, setOrderInfo] = useState(null);
+  const [orderInfo, setOrderInfo] = useState({ id: '', total: '0.00' });
 
-  // Get order info if needed
   useEffect(() => {
+    // Hem orderId hem total varsa, total'i düzgün formatla
     if (orderId) {
-      // You can fetch order details here if needed
+      let shownTotal = total;
+      if (!shownTotal || isNaN(Number(shownTotal))) shownTotal = "0.00";
+      else shownTotal = Number(shownTotal).toFixed(2);
+
       setOrderInfo({
         id: orderId,
-        total: total || '0',
+        total: shownTotal,
       });
     }
   }, [orderId, total]);
@@ -23,16 +27,17 @@ export default function PaymentDetails() {
     navigator.clipboard.writeText(text);
     alert('IBAN kopyalandı!');
   };
-  const copyRef =(text) => {
+  const copyRef = (text) => {
     navigator.clipboard.writeText(text);
     alert('Referans numarası kopyalandı!');
-  }
+  };
+
   return (
     <div className={styles.paymentDetailsPage}>
       <div className={styles.container}>
         <h1>Ödeme Bilgileri</h1>
-        
         <div className={styles.paymentCard}>
+          {/* BANKA */}
           <div className={styles.ibanSection}>
             <h2>Banka Hesap Bilgileri</h2>
             <div className={styles.ibanInfo}>
@@ -40,7 +45,7 @@ export default function PaymentDetails() {
               <p><strong>Hesap Sahibi:</strong> SAKAOGLU STORE</p>
               <div className={styles.ibanBox}>
                 <span><strong>IBAN:</strong> TR00 0000 0000 0000 0000 0000 00</span>
-                <button 
+                <button
                   onClick={() => copyToClipboard('TR00 0000 0000 0000 0000 0000 00')}
                   className={styles.copyButton}
                 >
@@ -49,20 +54,21 @@ export default function PaymentDetails() {
               </div>
             </div>
           </div>
-
-          <div className={styles.orderInfo}>            <h2>Sipariş Özeti</h2>
+          {/* SİPARİŞ ÖZETİ */}
+          <div className={styles.orderInfo}>
+            <h2>Sipariş Özeti</h2>
             <div className={styles.ibanBox}>
-              <span><strong>Referans Numarası:</strong> {orderInfo?.id}</span>
-              <button 
-                onClick={() => copyRef(orderInfo?.id)}
+              <span><strong>Referans Numarası:</strong> {orderInfo.id}</span>
+              <button
+                onClick={() => copyRef(orderInfo.id)}
                 className={styles.copyButton}
               >
                 Referans Numaranızı Kopyala
               </button>
             </div>
-            <p><strong>Ödenecek Tutar:</strong> {orderInfo?.total} TL</p>
+            <p><strong>Ödenecek Tutar:</strong> {orderInfo.total} TL</p>
           </div>
-
+          {/* TALİMATLAR */}
           <div className={styles.instructions}>
             <h2>Ödeme Talimatları</h2>
             <ol>
@@ -72,9 +78,9 @@ export default function PaymentDetails() {
               <li>Sipariş durumunuzu "Siparişlerim" sayfasından takip edebilirsiniz</li>
             </ol>
           </div>
-
+          {/* BUTTON */}
           <div className={styles.buttons}>
-            <button 
+            <button
               onClick={() => router.push('/order-history')}
               className={styles.primaryButton}
             >

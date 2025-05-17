@@ -113,16 +113,18 @@ const [popupType, setPopupType] = useState(null);
   if (!kvkkAccepted || !mesafeliAccepted) {
     alert('Lütfen KVKK ve Mesafeli Satış sözleşmelerini kabul edin.');
     return;
-  }
-  try {
+  }  try {
     const cartTotal = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const selectedAddress = addresses[selectedAddressIndex];
-    const addressId = selectedAddress?._id;  // <-- Buradan al!
-
+    const addressId = selectedAddress?._id;
+    
     const orderRes = await fetch(`https://api.sakaoglustore.net/api/box/open-box/${userId}/${addressId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quantity: cartTotal })
+      body: JSON.stringify({ 
+        quantity: cartTotal,
+        totalPrice: totals.finalTotal
+      })
     });
 
     const orderData = await orderRes.json();
@@ -134,11 +136,8 @@ const [popupType, setPopupType] = useState(null);
 
     await fetch(`https://api.sakaoglustore.net/api/cart/clear/${userId}`, {
       method: 'DELETE'
-    });
-
-    setCartItems([]);
-    alert('Siparişiniz başarıyla alındı!');
-    window.location.href = '/order-history';
+    });    setCartItems([]);    const orderId = orderData.orders[0]?.orderId;
+    window.location.href = `/payment-details?orderId=${orderId}&total=${totals.finalTotal}`;
 
   } catch (err) {
     console.error('Satın alma hatası:', err);
