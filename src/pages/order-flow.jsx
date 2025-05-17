@@ -99,32 +99,30 @@ const [popupType, setPopupType] = useState(null);
     fetch(`https://api.sakaoglustore.net/api/cart/remove/${userId}/${productId}`, {
       method: 'DELETE'
     }).then(() => fetchCart());
-  };
-
-const handlePurchase = async () => {
+  };  
+  const handlePurchase = async () => {
   if (!userId) {
     setPopupType('login-purchase');
     setPopupVisible(true);
     return;
   }
-  if (!selectedAddressId) {
+  if (selectedAddressIndex === null) {
     alert('Lütfen bir adres seçin.');
     return;
   }
-
   if (!kvkkAccepted || !mesafeliAccepted) {
     alert('Lütfen KVKK ve Mesafeli Satış sözleşmelerini kabul edin.');
     return;
   }
-
   try {
-    const quantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const cartTotal = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const selectedAddress = addresses[selectedAddressIndex];
+    const addressId = selectedAddress?._id;  // <-- Buradan al!
 
-    // 1) Siparişi kendi backendine gönder
-    const orderRes = await fetch(`https://api.sakaoglustore.net/api/box/open-box/${userId}/${selectedAddressId}`, {
+    const orderRes = await fetch(`https://api.sakaoglustore.net/api/box/open-box/${userId}/${addressId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quantity })
+      body: JSON.stringify({ quantity: cartTotal })
     });
 
     const orderData = await orderRes.json();
@@ -134,15 +132,13 @@ const handlePurchase = async () => {
       return;
     }
 
-    // 2) Başarılı olursa: SEPETİ TEMİZLE
     await fetch(`https://api.sakaoglustore.net/api/cart/clear/${userId}`, {
       method: 'DELETE'
     });
 
-    // 3) Localde de sepeti sıfırla
-    setCartItems([]);    // 4) Başarılı mesajı ve ödeme sayfasına yönlendirme
-    const orderId = orderData.orders[0]?.orderId;
-    window.location.href = `/payment-details?orderId=${orderId}&total=${totals.finalTotal.toFixed(2)}`;
+    setCartItems([]);
+    alert('Siparişiniz başarıyla alındı!');
+    window.location.href = '/order-history';
 
   } catch (err) {
     console.error('Satın alma hatası:', err);

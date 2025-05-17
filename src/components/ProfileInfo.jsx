@@ -1,6 +1,19 @@
 import { useEffect, useState } from 'react';
 import styles from '@/styles/ProfilePage.module.css';
 
+const generateVerificationCode = () => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const codeLength = 8;
+  let code = '';
+  
+  for (let i = 0; i < codeLength; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters[randomIndex];
+  }
+  
+  return code;
+};
+
 export function ProfileInfo() {
   const [storedUser, setStoredUser] = useState(null);
   const [form, setForm] = useState({
@@ -38,13 +51,15 @@ export function ProfileInfo() {
     }
 
     try {
-      const res = await fetch(`https://api.sakaoglustore.net/api/user/update-profile/${storedUser._id}`, {
+      const verificationCode = generateVerificationCode();
+        const res = await fetch(`https://api.sakaoglustore.net/api/user/update-profile/${storedUser._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstName: form.firstName,
           lastName: form.lastName,
-          phone: form.phone
+          phone: form.phone,
+          orderVerificationCode: verificationCode
         })
       });
 
@@ -54,11 +69,11 @@ export function ProfileInfo() {
           ...storedUser,
           firstName: data.updatedUser.firstName,
           lastName: data.updatedUser.lastName,
-          phone: data.updatedUser.phone
+          phone: data.updatedUser.phone,          orderVerificationCode: verificationCode
         };
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setStoredUser(updatedUser);
-        setMessage('Bilgiler başarıyla güncellendi ✅');
+        setMessage('Bilgiler başarıyla güncellendi. Sipariş Onay Kodunuz: ' + verificationCode + ' ✅');
       } else {
         setMessage(data.message || 'Güncelleme başarısız ❌');
       }
