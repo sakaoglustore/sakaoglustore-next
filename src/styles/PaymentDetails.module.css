@@ -31,6 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 1rem;
   margin: 1rem 0;
   padding: 1rem;
@@ -42,7 +43,7 @@
 
 .copyButton {
   padding: 0.5rem 1rem;
-  background-color: #007bff;
+  background-color: #daa569;
   color: white;
   border: none;
   border-radius: 4px;
@@ -51,7 +52,7 @@
 }
 
 .copyButton:hover {
-  background-color: #0056b3;
+  background-color: #c89050;
 }
 
 .orderInfo {
@@ -87,7 +88,7 @@
 
 .primaryButton {
   padding: 0.75rem 1.5rem;
-  background-color: #28a745;
+  background-color: #daa569;
   color: white;
   border: none;
   border-radius: 4px;
@@ -97,5 +98,119 @@
 }
 
 .primaryButton:hover {
-  background-color: #218838;
+  background-color: #c89050;
+}
+
+/* Responsive tasarım kuralları */
+@media (max-width: 768px) {
+  .paymentDetailsPage {
+    padding: 1rem;
+  }
+  
+  .paymentCard {
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin: 0.5rem;
+  }
+  
+  .ibanSection {
+    padding: 1rem;
+  }
+  
+  .ibanBox {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .ibanBox span {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    word-break: break-word;
+    font-size: 0.95rem;
+  }
+  
+  .copyButton {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.6rem;
+    text-align: center;
+  }
+}
+
+/* Daha küçük ekranlar için ek tasarım kuralları */
+@media (max-width: 480px) {
+  .paymentDetailsPage {
+    padding: 0.75rem 0.5rem;
+    background-color: #f9f9f9;
+  }
+  
+  .paymentCard {
+    padding: 0.75rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }  
+  .paymentDetailsPage h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 0.75rem 0;
+  }
+  
+  .ibanSection,
+  .orderInfo,
+  .instructions {
+    margin-bottom: 1.25rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(218, 165, 105, 0.3);
+    font-weight: bold;
+  }
+  
+  .buttons {
+    flex-direction: column;
+    margin-top: 1.5rem;
+  }
+  
+  .primaryButton {
+    width: 100%;
+    padding: 0.8rem;
+  }
+  
+  .ibanInfo p {
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+  }
+  
+  .ibanBox {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(218, 165, 105, 0.3);
+  }
+  
+  .copyButton, 
+  .primaryButton {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 4px;
+  }
+    .instructions ol {
+    padding-left: 1.25rem;
+  }
+  
+  .instructions li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .pageTitle {
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 0.75rem 0;
+    font-weight: bold;
+  }
 }

@@ -140,3 +140,66 @@
   font-weight: bold;
   letter-spacing: 1px;
 }
+
+.paymentButton {
+  display: inline-block;
+  background-color: #daa569;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.paymentButton:hover {
+  background-color: #c39058;
+}
+
+.tabButtons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.tabButton {
+  background-color: #f5f5f5;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tabButton.active {
+  background-color: #daa569;
+  color: white;
+  border-color: #daa569;
+}
+
+.tabButton:hover {
+  background-color: #e9e9e9;
+}
+
+.tabButton.active:hover {
+  background-color: #c39058;
+}
+
+@media (max-width: 768px) {
+  .paymentButton, .tabButton {
+    width: 100%;
+    padding: 0.75rem;
+    text-align: center;
+  }
+  
+  .tabButtons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

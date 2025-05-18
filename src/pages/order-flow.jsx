@@ -13,8 +13,7 @@ export default function OrderFlowPage() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({ title: '', fullAddress: '' });
   const [kvkkAccepted, setKvkkAccepted] = useState(false);
-  const [mesafeliAccepted, setMesafeliAccepted] = useState(false);
-const [popupType, setPopupType] = useState(null); 
+  const [mesafeliAccepted, setMesafeliAccepted] = useState(false);  const [popupType, setPopupType] = useState(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -33,7 +32,7 @@ const [popupType, setPopupType] = useState(null);
   }, [user]);
 
   const fetchCart = () => {
-    fetch(`https://api.sakaoglustore.net/api/cart/${userId}`)
+    fetch(`http://localhost:5000/api/cart/${userId}`)
       .then(res => res.json())
       .then(data => {
         const cart = Array.isArray(data) ? data : data.cart || [];
@@ -88,7 +87,7 @@ const [popupType, setPopupType] = useState(null);
 
   const updateQuantity = (productId, newQty) => {
     if (newQty < 1) return;
-    fetch('https://api.sakaoglustore.net/api/cart/add', {
+    fetch('http://localhost:5000/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: newQty })
@@ -96,7 +95,7 @@ const [popupType, setPopupType] = useState(null);
   };
 
   const removeItem = (productId) => {
-    fetch(`https://api.sakaoglustore.net/api/cart/remove/${userId}/${productId}`, {
+    fetch(`http://localhost:5000/api/cart/remove/${userId}/${productId}`, {
       method: 'DELETE'
     }).then(() => fetchCart());
   };  
@@ -118,7 +117,7 @@ const [popupType, setPopupType] = useState(null);
     const selectedAddress = addresses[selectedAddressIndex];
     const addressId = selectedAddress?._id;
     
-    const orderRes = await fetch(`https://api.sakaoglustore.net/api/box/open-box/${userId}/${addressId}`, {
+    const orderRes = await fetch(`http://localhost:5000/api/box/open-box/${userId}/${addressId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -134,7 +133,7 @@ const [popupType, setPopupType] = useState(null);
       return;
     }
 
-    await fetch(`https://api.sakaoglustore.net/api/cart/clear/${userId}`, {
+    await fetch(`http://localhost:5000/api/cart/clear/${userId}`, {
       method: 'DELETE'
     });    setCartItems([]);    const orderId = orderData.orders[0]?.orderId;
     window.location.href = `/payment-details?orderId=${orderId}&total=${totals.finalTotal}`;
@@ -166,7 +165,6 @@ const handlePopupOpen = (index = null) => {
   const handleFormChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
   const saveAddress = async () => {
   if (!form.title || !form.city || !form.district || !form.fullAddress || !form.phone || !user?._id) {
     alert('Lütfen tüm alanları doldurun.');
@@ -174,8 +172,8 @@ const handlePopupOpen = (index = null) => {
   }
 
   const url = editingIndex !== null
-    ? `https://api.sakaoglustore.net/api/user/address/update/${user._id}/${editingIndex}`
-    : `https://api.sakaoglustore.net/api/user/address/add/${user._id}`;
+    ? `http://localhost:5000/api/user/address/update/${user._id}/${editingIndex}`
+    : `http://localhost:5000/api/user/address/add/${user._id}`;
 
   const method = editingIndex !== null ? 'PUT' : 'POST';
 
@@ -243,11 +241,19 @@ const handlePopupOpen = (index = null) => {
                   <h4>{addr.title}</h4>
                   <p>{addr.fullAddress}</p>
                   <div className={styles.actionButtons}>
-                    <button onClick={(e) => { e.stopPropagation(); handlePopupOpen(index); }}>Düzenle</button>
-                  </div>
+                    <button onClick={(e) => { e.stopPropagation(); handlePopupOpen(index); }}>Düzenle</button>                  </div>
                 </div>
               ))}
-              <button onClick={() => handlePopupOpen()}>Yeni Adres Ekle</button>
+              <button 
+                className={styles.addAddressBtn} 
+                onClick={() => handlePopupOpen()}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Yeni Adres Ekle
+              </button>
             </div>
           </div>
         </div>
@@ -255,39 +261,57 @@ const handlePopupOpen = (index = null) => {
           <h3>Fiyat Özeti</h3>
           <p>Kutu Ücreti: {totals.totalBoxFee.toFixed(2)} TL</p>
           <p>Kargo Ücreti: {totals.totalShipping.toFixed(2)} TL</p>
-          <p>KDV: {totals.totalVAT.toFixed(2)} TL</p>
-          <p>Net Fiyat: {totals.net.toFixed(2)} TL</p>
+          <p>KDV: {totals.totalVAT.toFixed(2)} TL</p>          <p>Net Fiyat: {totals.net.toFixed(2)} TL</p>
           <hr />
-          <p><strong>Toplam: {totals.finalTotal.toFixed(2)} TL</strong></p>
-          <div style={{ marginBottom: '10px' }}>
-  <label>
-    <input
-      type="checkbox"
-      checked={kvkkAccepted}
-      onChange={() => setKvkkAccepted(!kvkkAccepted)}
-    />{' '}
-    KVKK Aydınlatma Metnini okudum ve kabul ediyorum.
-  </label>
-</div>
+          <p><strong>Toplam: {totals.finalTotal.toFixed(2)} TL</strong></p>          <div className={styles.checkboxContainer}>
+            <input
+              type="checkbox"
+              id="kvkk"
+              checked={kvkkAccepted}
+              onChange={() => setKvkkAccepted(!kvkkAccepted)}
+            />            <label htmlFor="kvkk">
+              KVKK Aydınlatma Metnini okudum ve kabul ediyorum.
+              <button
+                id="kvkkViewBtn"
+                className={styles.viewButton}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open('/kvkk', '_blank');
+                }}
+              >
+                Görüntüle
+              </button>
+            </label>
+          </div>
 
-<div style={{ marginBottom: '20px' }}>
-  <label>
-    <input
-      type="checkbox"
-      checked={mesafeliAccepted}
-      onChange={() => setMesafeliAccepted(!mesafeliAccepted)}
-    />{' '}
-    Mesafeli Satış Sözleşmesini okudum ve kabul ediyorum.
-  </label>
-</div>
+          <div className={styles.checkboxContainer}>
+            <input
+              type="checkbox"
+              id="mesafeli"
+              checked={mesafeliAccepted}
+              onChange={() => setMesafeliAccepted(!mesafeliAccepted)}
+            />            <label htmlFor="mesafeli">
+              Mesafeli Satış Sözleşmesini okudum ve kabul ediyorum.
+              <button
+                id="mesafeliViewBtn"
+                className={styles.viewButton}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open('/mesafeli-satis-sozlesmesi', '_blank');
+                }}
+              >
+                Görüntüle
+              </button>
+            </label>
+          </div>
 
-<button
-  onClick={handlePurchase}
-  className={styles.purchaseBtn}
-  disabled={!(kvkkAccepted && mesafeliAccepted)}
->
-  Satın Al
-</button>        </div>
+          <button
+            onClick={handlePurchase}
+            className={styles.purchaseBtn}
+            disabled={!(kvkkAccepted && mesafeliAccepted)}
+          >
+            Satın Al
+          </button></div>
 {popupVisible && (
   <div className={styles.popupOverlay}>
     <div className={styles.popupContent}>

@@ -19,4 +19,47 @@
   .auth-form p {
     color: red;
   }
+  .message {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    text-align: center;
+  }
   
+  .success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #059669;
+  }
+  
+  .error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+  }
+  
+  .formInfo {
+    text-align: center;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+  }
+  
+  .authLinks {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+  
+  .authLinks a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  
+  .authLinks a:hover {
+    text-decoration: underline;
+  }
+  
+  .authLinks span {
+    color: #6b7280;
+    margin: 0 0.5rem;
+  }

@@ -22,7 +22,7 @@ export function AddressManager() {
     const fetchAddresses = async () => {
       if (!user?._id) return;
       try {
-        const res = await fetch(`https://api.sakaoglustore.net/api/user/addresses/${user._id}`);
+        const res = await fetch(`http://localhost:5000/api/user/addresses/${user._id}`);
         const data = await res.json();
         if (res.ok) {
           setAddresses(data.addresses);
@@ -72,8 +72,8 @@ export function AddressManager() {
     }
 
     const url = editIndex !== null
-      ? `https://api.sakaoglustore.net/api/user/address/update/${user._id}/${editIndex}`
-      : `https://api.sakaoglustore.net/api/user/address/add/${user._id}`;
+      ? `http://localhost:5000/api/user/address/update/${user._id}/${editIndex}`
+      : `http://localhost:5000/api/user/address/add/${user._id}`;
 
     const method = editIndex !== null ? 'PUT' : 'POST';
 
@@ -91,7 +91,7 @@ export function AddressManager() {
 
   const deleteAddress = async (index) => {
     if (!user?._id) return;
-    const res = await fetch(`https://api.sakaoglustore.net/api/user/address/delete/${user._id}/${index}`, {
+    const res = await fetch(`http://localhost:5000/api/user/address/delete/${user._id}/${index}`, {
       method: 'DELETE'
     });
     const data = await res.json();

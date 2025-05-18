@@ -16,7 +16,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch('https://api.sakaoglustore.net/api/auth/login', {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -27,7 +27,7 @@ export default function Login() {
 
       if (res.ok) {
         // ✅ identifier doğrudan e-posta olarak kullanılır
-        const userInfoRes = await fetch(`https://api.sakaoglustore.net/api/user/by-email/${form.identifier}`);
+        const userInfoRes = await fetch(`http://localhost:5000/api/user/by-email/${form.identifier}`);
         const userInfo = await userInfoRes.json();
 
         if (userInfo?.user) {
@@ -47,10 +47,9 @@ export default function Login() {
 
   return (
     <form onSubmit={handleSubmit} className={styles['auth-form']}>
-      <h2>Giriş Yap</h2>
-      <input
+      <h2>Giriş Yap</h2>      <input
         name="identifier"
-        placeholder="Email veya Telefon"
+        placeholder="Email"
         onChange={handleChange}
         required
       />
@@ -59,10 +58,14 @@ export default function Login() {
         type="password"
         placeholder="Şifre"
         onChange={handleChange}
-        required
-      />
+        required      />
       <button type="submit">Giriş Yap</button>
       <p>{message}</p>
+      <div className={styles.authLinks}>
+        <a href="/signup">Kayıt Ol</a>
+        <span> | </span>
+        <a href="/forgot-password">Şifremi Unuttum</a>
+      </div>
     </form>
   );
 }

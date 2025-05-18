@@ -1,11 +1,13 @@
 .orderFlowPage {
-    background-color: #f8f9fa;
-    padding: 2rem 1rem;
+    background-color: #f9f6f2; /* Lighter shade of the box color */
+    padding: 1.5rem 1rem;
     min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #000000; /* Updated to black text */
 }
 
 .orderContainer {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -15,21 +17,42 @@
 
 .orderLeft {
     background: white;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(218, 165, 105, 0.1); /* Box color shadow */
+    transition: all 0.3s ease;
 }
 
 .orderSummary {
     background: white;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(218, 165, 105, 0.1); /* Box color shadow */
     height: fit-content;
     position: sticky;
     top: 2rem;
     width: 300px;
     align-self: start;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(218, 165, 105, 0.15); /* Light border with box color */
+}
+
+.orderSummary h3 {
+    margin-bottom: 1rem;
+    color: #000000; /* Black text */
+    font-weight: 600;
+}
+
+.orderSummary p {
+    margin: 0.5rem 0;
+    color: #333333; /* Darker text for readability */
+}
+
+.orderSummary hr {
+    margin: 1rem 0;
+    border: none;
+    height: 1px;
+    background-color: #DAA569; /* Box color for horizontal rules */
 }
 
 .cartItems {
@@ -41,20 +64,29 @@
 .cartItem {
     display: grid;
     grid-template-columns: 100px 1fr;
-    gap: 1rem;
-    padding: 0.875rem;
-    background: #f8f9fa;
-    border-radius: 0.5rem;
+    gap: 1.25rem;
+    padding: 1rem;
+    background: #ffffff;
+    border: 1px solid rgba(218, 165, 105, 0.2); /* Light border with box color */
+    border-radius: 0.75rem;
     align-items: center;
-    margin: 0 auto;
+    margin: 0 auto 1rem;
     max-width: 600px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cartItem:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(218, 165, 105, 0.15); /* Box color shadow on hover */
 }
 
 .cartItem img {
     width: 100%;
     height: 100px;
-    object-fit: cover;
-    border-radius: 0.375rem;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background: #f8f9fa;
 }
 
 .cartDetails {
@@ -65,42 +97,64 @@
 
 .cartDetails h4 {
     margin: 0;
-    color: #1f2937;
+    color: #000000; /* Black text */
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.cartDetails p {
+    margin: 0;
+    color: #333333; /* Darker text for readability */
+    font-size: 0.95rem;
 }
 
 .quantityControls {
     display: flex;
     align-items: center;
     gap: 1rem;
+    margin: 0.5rem 0;
 }
 
 .quantityControls button {
-    background-color: #4f46e5;
+    background-color: #10B981; /* Green button color */
     color: white;
     border: none;
-    padding: 0.375rem 0.75rem;
-    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.2s;
     font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    font-weight: 500;
 }
 
 .quantityControls button:hover {
-    background-color: #4338ca;
+    background-color: #059669; /* Darker green on hover */
+    transform: translateY(-1px);
 }
 
 .removeBtn {
-    background-color: #ef4444;
-    color: white;
+    background-color: #2f2f2f;
+    color: #2f2f2f;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.2s;
+    font-weight: 500;
 }
 
 .removeBtn:hover {
-    background-color: #dc2626;
+    background-color: #e11d48;
+}
+
+.addressPage {
+    max-width: 800px;
+    margin: 1.5rem auto;
+    text-align: center;
 }
 
 .addressList {
@@ -114,40 +168,80 @@
 }
 
 .addressCard {
-    background: #f8f9fa;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    padding: 0.875rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1rem;
     cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.875rem;
+    transition: all 0.25s ease;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }
 
 .addressCard:hover {
-    border-color: #4f46e5;
+    border-color: #DAA569; /* Box color for border on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(218, 165, 105, 0.15); /* Box color shadow */
 }
 
 .addressCard.selected {
-    border-color: #4f46e5;
-    background: #eff6ff;
+    border-color: #DAA569; /* Box color for selected address */
+    background-color: rgba(218, 165, 105, 0.1); /* Light box color background */
+    box-shadow: 0 4px 12px rgba(218, 165, 105, 0.15); /* Box color shadow */
+}
+
+.addressCard h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #000000; /* Black text */
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.addressCard p {
+    margin: 0.25rem 0;
+    color: #333333; /* Darker text for readability */
+    font-size: 0.875rem;
+}
+
+.actionButtons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+}
+
+.actionButtons button {
+    background: rgba(218, 165, 105, 0.1); /* Light box color background */
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: #000000; /* Black text */
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.actionButtons button:hover {
+    background: rgba(218, 165, 105, 0.25); /* Darker box color background on hover */
+    color: #000000; /* Black text */
 }
 
 .purchaseBtn {
     width: 100%;
-    background: #4f46e5;
+    background: #10B981; /* Green button color */
     color: white;
     border: none;
     padding: 1rem;
     border-radius: 0.5rem;
     font-size: 1.1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
     margin-top: 1rem;
 }
 
 .purchaseBtn:hover {
-    background: #4338ca;
+    background: #059669; /* Darker green on hover */
     transform: translateY(-2px);
 }
 
@@ -157,18 +251,444 @@
     transform: none;
 }
 
+/* Checkbox ve Form Stilleri */
+.checkboxContainer {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    background: rgba(218, 165, 105, 0.05); /* Very light box color background */
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(218, 165, 105, 0.2); /* Light box color border */
+    transition: all 0.2s ease;
+}
+
+.checkboxContainer:hover {
+    border-color: #DAA569; /* Box color */
+    background: rgba(218, 165, 105, 0.1); /* Light box color background */
+}
+
+.checkboxContainer input[type="checkbox"] {
+    margin-right: 0.75rem;
+    width: 18px;
+    height: 18px;
+    accent-color: #DAA569; /* Box color */
+}
+
+.checkboxContainer label {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #000000; /* Black text */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* Specific button styling with IDs to override any conflicting styles */
+#kvkkViewBtn, #mesafeliViewBtn {
+    background-color: #daa569 !important;
+    color: white !important;
+    border: none !important;
+    text-decoration: none !important;
+    font-weight: 500;
+}
+
+#kvkkViewBtn:hover, #mesafeliViewBtn:hover {
+    background-color: #c89050 !important;
+}
+
+/* View button styling - Updated to be more prominent */
+.viewButton {
+    margin-left: 10px;
+    padding: 5px 12px;
+    background-color: #daa569 !important; /* Force this color with !important */
+    color: white !important;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    text-decoration: none !important;
+}
+
+.viewButton:hover {
+    background-color: #c89050 !important;
+    transform: translateY(-1px);
+}
+
+.viewButton:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(218, 165, 105, 0.5);
+}
+
+.viewDocumentBtn {
+    background-color: transparent;
+    color: #daa569; /* Color matching the viewButton */
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+    text-decoration: underline;
+    transition: all 0.2s ease;
+}
+
+.viewDocumentBtn:hover {
+    color: #c89050; /* Darker version matching viewButton:hover */
+    background-color: rgba(218, 165, 105, 0.05); /* Very light background */
+}
+
+.formGroup {
+    margin-bottom: 1rem;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #000000; /* Black text */
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+    border-color: #DAA569; /* Box color */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(218, 165, 105, 0.2); /* Box color shadow */
+}
+
+/* Form field styles */
+.formField {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.formField label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #000000; /* Black text */
+    font-size: 0.9rem;
+}
+
+.formField input,
+.formField textarea,
+.formField select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.formField input:focus,
+.formField textarea:focus,
+.formField select:focus {
+    border-color: #DAA569; /* Box color */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(218, 165, 105, 0.2); /* Box color shadow */
+}
+
+.link {
+    color: #1f2937; /* Blue highlight color */
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.link:hover {
+    color: #1f2937; /* Darker blue on hover */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.popupOverlay {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.2s ease;
+}
+
+.popupContent {
+    background: white;
+    padding: 1.75rem;
+    border-radius: 1rem;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    animation: slideUp 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.popupContent h3 {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    color: #000000; /* Black text */
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.popupContent input,
+.popupContent textarea {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    background-color: #f9fafb;
+}
+
+.popupContent input:focus,
+.popupContent textarea:focus {
+    border-color: #DAA569; /* Box color */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(218, 165, 105, 0.2); /* Box color shadow */
+    background-color: #ffffff;
+}
+
+.popupActions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.25rem;
+    gap: 0.75rem;
+}
+
+.popupActions button {
+    flex: 1;
+    padding: 0.75rem 0;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-height: 44px;
+}
+
+.popupActions button:first-child {
+    background-color: #10B981; /* Green button color */
+    color: white;
+}
+
+.popupActions button:first-child:hover {
+    background-color: #059669; /* Darker green on hover */
+    transform: translateY(-1px);
+}
+
+.popupActions button:last-child {
+    background-color: rgba(218, 165, 105, 0.1); /* Light box color background */
+    color: #000000; /* Black text */
+}
+
+.popupActions button:last-child:hover {
+    background-color: rgba(218, 165, 105, 0.2); /* Slightly darker box color background */
+    transform: translateY(-1px);
+}
+
+.addAddressBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: #10B981; /* Green button color */
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 1rem auto;
+    width: fit-content;
+}
+
+.addAddressBtn:hover {
+    background-color: #059669; /* Darker green on hover */
+    transform: translateY(-1px);
+}
+
+.addAddressBtn svg {
+    margin-right: 0.25rem;
+}
+
+/* Document Popup Styles */
+.documentPopup {
+    max-width: 800px;
+    max-height: 90vh;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.documentPopup h3 {
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #000000;
+    border-bottom: 2px solid #DAA569;
+    padding-bottom: 0.75rem;
+}
+
+.documentContent {
+    overflow-y: auto;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    max-height: 65vh;
+    border: 1px solid rgba(218, 165, 105, 0.2);
+    border-radius: 0.5rem;
+    background-color: #f9f6f2;
+    -webkit-overflow-scrolling: touch;
+}
+
+.documentContent::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 4px;
+    background-color: rgba(218, 165, 105, 0.3);
+    border-radius: 10px;
+    pointer-events: none;
+    animation: pulseScroll 2s infinite;
+}
+
+@keyframes pulseScroll {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+
+.documentContent h4 {
+    margin: 1.25rem 0 0.5rem;
+    color: #000000;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(218, 165, 105, 0.3);
+    padding-bottom: 0.35rem;
+}
+
+.documentContent p {
+    margin-bottom: 1rem;
+    color: #333333;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.documentContent strong {
+    color: #000000;
+    font-weight: 600;
+}
+
+/* Custom scrollbar for document content */
+.documentContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+.documentContent::-webkit-scrollbar-track {
+    background: rgba(218, 165, 105, 0.1);
+    border-radius: 10px;
+}
+
+.documentContent::-webkit-scrollbar-thumb {
+    background: rgba(218, 165, 105, 0.5);
+    border-radius: 10px;
+}
+
+.documentContent::-webkit-scrollbar-thumb:hover {
+    background: #DAA569;
+}
+
+.scrollIndicator {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #666;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    pointer-events: none;
+    animation: fadeIndicator 3s ease-in-out infinite;
+}
+
+.scrollIndicator svg {
+    width: 14px;
+    height: 14px;
+}
+
+@keyframes fadeIndicator {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Media Queries */
 @media (max-width: 768px) {
     .orderContainer {
         grid-template-columns: 1fr;
+        padding: 0.5rem;
+        gap: 1rem;
     }
 
     .orderSummary {
         position: static;
-        margin-top: 2rem;
+        margin: 1rem auto;
+        width: 100%;
+        max-width: 90%;
+        padding: 1.25rem;
+    }
+
+    .orderLeft {
+        padding: 1.25rem;
     }
 
     .cartItem {
         grid-template-columns: 80px 1fr;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
     }
 
     .cartItem img {
@@ -177,338 +697,131 @@
 
     .addressList {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .quantityControls {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .quantityControls button {
+        min-width: 32px;
+        padding: 0.4rem 0.6rem;
     }
 }
-  
-  .orderWrapper h2 {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .orderSection {
-    margin-bottom: 30px;
-  }
-  
-  .orderContainer {
-    display: flex;
-    max-width: 1100px;
-    width: 100%;
-    gap: 30px;
-  }
-  
-  .orderLeft {
-    flex: 1;
-  }
-  .orderSummary {
-    background-color: white;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    max-width: 300px;
-    margin-left: 2rem;
-    height: fit-content;
-  }
-  
-  .orderSummary h3 {
-    margin-bottom: 1rem;
-  }
-  
-  .orderSummary p {
-    margin: 6px 0;
-  }
-  
-  .orderSummary hr {
-    margin: 16px 0;
-  }
-  
-  .purchaseBtn {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 14px;
-    border: none;
-    border-radius: 6px;
-    width: 100%;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  .addressPage {
-    max-width: 800px;
-    margin: 30px auto;
-    text-align: center;
-  }
-  
-  .addressList {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin: 20px 0;
-  }
-  
-  .addressCard {
-    border: 1px solid gray;
-    border-radius: 8px;
-    padding: 15px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .addressCard.selected {
-    border: 2px solid #28a745;
-    background-color: #e9fce9;
-  }
-  
-  .addBtn {
-    background-color: #ffc107;
-    color: black;
-    border: none;
-    padding: 10px 14px;
-    margin-right: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .purchaseBtn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .popupContent {
-    background: #fff;
-    padding: 25px 30px;
-    border-radius: 12px;
-    width: 360px;
-    text-align: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    animation: fadeIn 0.3s ease-in-out;
-    font-family: 'Segoe UI', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; /* Genişlik uyumu */
-  }
-  
-  .popupContent h3 {
-    margin-bottom: 20px;
-    font-size: 22px;
-    color: #333;
-  }
-  
-  .popupContent input,
-  .popupContent textarea {
-    width: 100%;
-    margin-bottom: 14px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border 0.2s ease;
-  }
-  
-  .popupContent input:focus,
-  .popupContent textarea:focus {
-    border: 1px solid #28a745;
-    outline: none;
-  }
-  
-  .popupActions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  
-  .popupActions button {
-    flex: 1;
-    padding: 10px 0;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s ease;
-    margin: 0 5px;
-  }
-  
-  .popupActions button:first-child {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .popupActions button:first-child:hover {
-    background-color: #218838;
-  }
-  
-  .popupActions button:last-child {
-    background-color: #ccc;
-    color: #333;
-  }
-  
-  .popupActions button:last-child:hover {
-    background-color: #b3b3b3;
-  }
-  
-  .popup {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-  .cartPage {
-    padding: 20px;
-    max-width: 1000px;
-    margin: auto;
-    text-align: center;
-  }
-  
-  .cartItems {
-    margin-top: 20px;
-  }
-  
-  .cartItem {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    flex-wrap: wrap;
-  }
-  
-  .cartItem img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    margin-right: 20px;
-  }
-  
-  .cartDetails {
-    flex: 1;
-    text-align: left;
-  }
-  
-  .quantityControls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px 0;
-  }
-  
-  .quantityControls button,
-  .removeBtn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background-color: #10b981;
-    color: white;
-    transition: background 0.3s ease;
-  }
-  
-  .quantityControls button:hover,
-  .removeBtn:hover {
-    background-color: #059669;
-  }
-  
-  .removeBtn {
-    background-color: #ef4444;
-  }
-  
-  .removeBtn:hover {
-    background-color: #dc2626;
-  }
-  
-  .purchaseBtn {
-    padding: 12px 24px;
-    background-color: #10b981;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
-  .purchaseBtn:hover {
-    background-color: #059669;
-  }
-  
-  @media (max-width: 600px) {
+
+@media (max-width: 600px) {
+    .orderFlowPage {
+        padding: 1rem 0.5rem;
+    }
+    
     .cartItem {
-      flex-direction: column;
-      align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
     }
   
     .cartItem img {
-      margin-bottom: 10px;
+        margin-bottom: 10px;
+        width: 90px;
+        height: 90px;
     }
   
     .cartDetails {
-      text-align: left;
-      width: 100%;
+        text-align: left;
+        width: 100%;
+        padding-top: 0.5rem;
     }
-  }
-       
-   .popupOverlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+    
+    .orderSummary {
+        padding: 1rem;
+        max-width: 100%;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+    
+    .orderLeft {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .addressCard {
+        padding: 0.75rem;
+    }
+    
+    .quantityControls {
+        justify-content: flex-start;
+    }
+    
+    .orderLeft h2, 
+    .orderLeft h3,
+    .orderSummary h3 {
+        font-size: 1.25rem;
+    }
+    
+    .popupContent {
+        width: 95%;
+        padding: 1rem;
+    }
+    
+    .documentPopup {
+        max-width: 100%;
+        max-height: 95vh;
+        width: 95%;
+    }
+    
+    .documentContent {
+        max-height: 70vh;
+        padding: 0.5rem;
+    }
+    
+    .documentContent h4 {
+        font-size: 1rem;
+        margin: 1rem 0 0.5rem;
+    }
+    
+    .documentContent p {
+        font-size: 0.9rem;
+        margin-bottom: 0.85rem;
+    }
+    
+    .scrollIndicator {
+        bottom: 1rem;
+        font-size: 0.7rem;
+    }
+    
+    .purchaseBtn {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+    
+    .popupActions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+      .checkboxContainer {
+        padding: 0.5rem;
+    }
+    
+    .checkboxContainer label {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .viewButton {
+        margin-top: 0.5rem;
+        margin-left: 0;
+        align-self: flex-start;
+    }
 }
 
-.popupContent {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  width: 90%;
-  max-width: 400px;
-  animation: fadeIn 0.3s ease;
+/* Mobile specific document popup styles */
+@media (max-height: 700px) {
+    .documentPopup {
+        max-height: 95vh;
+    }
+    
+    .documentContent {
+        max-height: 75vh;
+    }
 }
-
-.popupContent h3 {
-  margin-bottom: 15px;
-}
-
-.popupContent p {
-  margin-bottom: 20px;
-}
-
-.link {
-  color: #10b981;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.link:hover {
-  text-decoration: underline;
-}
-
-.closeBtn {
-  background: #333;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
- 

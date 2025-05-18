@@ -41,7 +41,7 @@ export default function SingleProduct() {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://api.sakaoglustore.net/api/gifts/${id}`)
+      fetch(`http://localhost:5000/api/gifts/${id}`)
         .then(res => res.json())
         .then(data => setProduct(data))
         .catch(err => console.error('Ürün yüklenirken hata:', err));
@@ -65,7 +65,7 @@ export default function SingleProduct() {
         return;
       }
 
-      const response = await fetch('https://api.sakaoglustore.net/api/cart/add', {
+      const response = await fetch('http://localhost:5000/api/cart/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

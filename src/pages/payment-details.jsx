@@ -46,10 +46,9 @@ export default function PaymentDetails() {
           <div className={styles.ibanSection}>
             <h2>Banka Hesap Bilgileri</h2>
             <div className={styles.ibanInfo}>
-              <p><strong>Banka:</strong> X BANKASI</p>
-              <p><strong>Hesap Sahibi:</strong> SAKAOGLU STORE</p>
+              <p><strong>Banka:</strong> Vakıfbank</p>
               <div className={styles.ibanBox}>
-                <span><strong>İsim:</strong>Mates e-ticaret limited şirketi</span>
+                <span><strong>İsim:</strong> Mates e-ticaret limited şirketi</span>
                 <button
                   onClick={() => copyName('Mates e-ticaret limited şirketi')}
                   className={styles.copyButton}
