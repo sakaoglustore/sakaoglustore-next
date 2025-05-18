@@ -110,7 +110,7 @@ export default function SingleProduct() {
 
           <div className={styles.priceDetails}>
             <p><span>KDV:</span> <span>{Math.round(product.price * (product.kdvOrani || 0))} TL</span></p>
-            <p><span>Kutu Ücreti:</span> <span>{product.kutuUcreti || 0} TL</span></p>
+            <p><span>Ambalaj bedeli:</span> <span>{product.kutuUcreti || 0} TL</span></p>
             <p><span>Kargo Ücreti:</span> <span>{product.kargoUcreti || 0} TL</span></p>
             <p><span>Kutu Ücreti:</span> <span>{Math.round(product.price || 0)} TL</span></p>
 

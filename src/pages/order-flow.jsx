@@ -259,7 +259,7 @@ const handlePopupOpen = (index = null) => {
         </div>
         <div className={styles.orderSummary}>
           <h3>Fiyat Özeti</h3>
-          <p>Kutu Ücreti: {totals.totalBoxFee.toFixed(2)} TL</p>
+          <p>Ambalaj bedeli: {totals.totalBoxFee.toFixed(2)} TL</p>
           <p>Kargo Ücreti: {totals.totalShipping.toFixed(2)} TL</p>
           <p>KDV: {totals.totalVAT.toFixed(2)} TL</p>          <p>Net Fiyat: {totals.net.toFixed(2)} TL</p>
           <hr />
