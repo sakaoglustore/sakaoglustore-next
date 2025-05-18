@@ -16,13 +16,33 @@ export default function ChatBot() {
       ],
       clickable: true
     }
-  ]);
-  const [input, setInput] = useState('');
+  ]);  const scrollToLatestAnswer = () => {
+    setTimeout(() => {
+      const messagesDiv = document.querySelector(`.${styles.messages}`);
+      if (messagesDiv) {
+        const scrollHeight = messagesDiv.scrollHeight;
+        const height = messagesDiv.clientHeight;
+        const maxScroll = scrollHeight - height;
+        messagesDiv.scrollTo({
+          top: maxScroll / 2,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  };
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    setMessages(prev => [...prev, { from: 'user', text: input }]);
-    setInput('');
+  const addInitialOptions = () => {
+    return {
+      from: 'bot',
+      text: 'Başka bir konuda yardım edebilir miyim?',
+      options: [
+        'Sipariş verdim ama ürünüm gelmedi',
+        'Kutudan ne çıkıyor?',
+        'İade veya değişim yapabilir miyim?',
+        'Sakaoğlu Store Gizemli Kutusu neden zarar ettirmez?'
+      ],
+      clickable: true
+    };
   };
 
   const handleOptionClick = (option) => {
@@ -32,34 +52,34 @@ export default function ChatBot() {
       setMessages(prev => [...prev, {
         from: 'bot',
         text: '📦 Siparişiniz 2-5 iş günü içinde teslim edilmediyse, destek@sakaoglustore.net adresine mail atabilirsiniz.'
-      }]);
+      }, addInitialOptions()]);
     } else if (option === 'Kutudan ne çıkıyor?') {
       setMessages(prev => [...prev, {
         from: 'bot',
         text: '🎁 Bluetooth kulaklık, akıllı saat, hoparlör, macbook, iphone serileri, kamp çadırı, blender, airpods, tablet, airfryer, drone, apple vision pro, game box ürünlerinden bir tanesi ile kesin karşılaşırsınız.'
-      }]);
+      }, addInitialOptions()]);
     } else if (option === 'İade veya değişim yapabilir miyim?') {
       setMessages(prev => [...prev, {
         from: 'bot',
-        text: '🔁 Gizemli kutular açıldıktan sonra iade/değişim kapsamına girmez. Ancak ürün arızalıysa iade yapılabilir.'
-      }]);
+        text: '🔁 Gizemli kutu elinize ulaştıktan sonra diye düzeltelim iade/değişim kapsamına girmez. Ancak ürün arızalıysa iade yapılabilir.'
+      }, addInitialOptions()]);
     }
     else if (option === 'Sakaoğlu Store Gizemli Kutusu neden zarar ettirmez?') {
       setMessages(prev => [...prev, {
         from: 'bot',
-text: `Sakaoğlu Store, sizlerden gelen yoğun talepler sonucunda ürünleri toptan ve yüklü miktarda tedarik eder. Talep yoğunluğu sayesinde piyasanın %50 altında fiyattan stok alır.
+        text: `Sakaoğlu Store, sizlerden gelen yoğun talepler sonucunda ürünleri toptan ve yüklü miktarda tedarik eder. Talep yoğunluğu sayesinde piyasanın %50 altında fiyattan stok alır.
 %20 KDV, %15 yüksek kademe hediyeler, %15 Sakaoğlu Store kazancıdır. 
 Edinilen kazancın yüksek miktarı ile lojistik ve yerli üretim noktasında yatırımlar sağlanır.
 
-Tüm gelir ve giderlerin ekstresi PDF dijital ekstre ve fatura olarak her ay düzenli şekilde topluluğun denetimine açık olarak paylaşılır. Topluluk, tüm giriş çıkışları denetler ve hesaplamalar sonucu tasarrufa giden yolda fikirler veya teklifler verebilir.`,
-      }]);
+Tüm gelir ve giderlerin ekstresi PDF dijital ekstre ve fatura olarak her ay düzenli şekilde topluluğun denetimine açık olarak paylaşılır. Topluluk, tüm giriş çıkışları denetler ve hesaplamalar sonucu tasarrufa giden yolda fikirler veya teklifler verebilir.`      }, addInitialOptions()]);
     }
+    scrollToLatestAnswer();
   };
 
   return (
-    <div className={styles.chatbot}>
-      {isOpen && (
+    <div className={styles.chatbot}>      {isOpen && (
         <div className={styles.chatWindow}>
+          <button className={styles.closeButton} onClick={() => setIsOpen(false)}>✖️</button>
           <div className={styles.messages}>
             {messages.map((msg, i) => (
               <div key={i} className={msg.from === 'bot' ? styles.bot : styles.user}>
@@ -78,17 +98,8 @@ Tüm gelir ve giderlerin ekstresi PDF dijital ekstre ve fatura olarak her ay dü
                       </button>
                     ))}
                   </>
-                )}
-              </div>
+                )}              </div>
             ))}
-          </div>
-          <div className={styles.inputRow}>
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              placeholder="Bir şey yazın..."
-            />
-            <button onClick={handleSend}>Gönder</button>
           </div>
         </div>
       )}

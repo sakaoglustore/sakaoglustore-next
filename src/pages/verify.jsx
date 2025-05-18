@@ -13,7 +13,7 @@ export default function VerifyPage() {
 
     const verifyUser = async () => {
       try {
-        const res = await fetch(`https://api.sakaoglustore.net/api/auth/verify?token=${token}&email=${email}`);
+        const res = await fetch(`http://localhost:5000/api/auth/verify?token=${token}&email=${email}`);
         const text = await res.text();
         setMessage(text);
         if (res.status === 200) {

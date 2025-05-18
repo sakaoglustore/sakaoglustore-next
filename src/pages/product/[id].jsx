@@ -41,7 +41,7 @@ export default function SingleProduct() {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://api.sakaoglustore.net/api/gifts/${id}`)
+      fetch(`http://localhost:5000/api/gifts/${id}`)
         .then(res => res.json())
         .then(data => setProduct(data))
         .catch(err => console.error('Ürün yüklenirken hata:', err));
@@ -65,7 +65,7 @@ export default function SingleProduct() {
         return;
       }
 
-      const response = await fetch('https://api.sakaoglustore.net/api/cart/add', {
+      const response = await fetch('http://localhost:5000/api/cart/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -109,9 +109,11 @@ export default function SingleProduct() {
           </div>
 
           <div className={styles.priceDetails}>
-            <p><span>KDV:</span> <span>{(product.price * (product.kdvOrani || 0)).toFixed(2)} TL</span></p>
+            <p><span>KDV:</span> <span>{Math.round(product.price * (product.kdvOrani || 0))} TL</span></p>
             <p><span>Kutu Ücreti:</span> <span>{product.kutuUcreti || 0} TL</span></p>
             <p><span>Kargo Ücreti:</span> <span>{product.kargoUcreti || 0} TL</span></p>
+            <p><span>Kutu Ücreti:</span> <span>{Math.round(product.price || 0)} TL</span></p>
+
           </div>
 
           <div className={styles.quantityControl}>
@@ -129,7 +131,7 @@ export default function SingleProduct() {
               className={`${styles.accordionButton} ${isExplanationsOpen ? styles.active : ''}`}
               onClick={() => setIsExplanationsOpen(!isExplanationsOpen)}
             >
-              Açıklamalar {isExplanationsOpen ? '▼' : '▶'}
+              Daha Fazla Bilgi Edin {isExplanationsOpen ? '▼' : '▶'}
             </button>
             
             {isExplanationsOpen && (

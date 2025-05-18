@@ -23,6 +23,11 @@ export default function PaymentDetails() {
     }
   }, [orderId, total]);
 
+
+  const copyName = (text) => {
+    navigator.clipboard.writeText(text);
+    alert('Alıcı ismi kopyalandı!');
+  };
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     alert('IBAN kopyalandı!');
@@ -44,9 +49,16 @@ export default function PaymentDetails() {
               <p><strong>Banka:</strong> X BANKASI</p>
               <p><strong>Hesap Sahibi:</strong> SAKAOGLU STORE</p>
               <div className={styles.ibanBox}>
-                <span><strong>IBAN:</strong> TR00 0000 0000 0000 0000 0000 00</span>
+                <span><strong>İsim:</strong>Mates e-ticaret limited şirketi</span>
                 <button
-                  onClick={() => copyToClipboard('TR00 0000 0000 0000 0000 0000 00')}
+                  onClick={() => copyName('Mates e-ticaret limited şirketi')}
+                  className={styles.copyButton}
+                >
+                  Kopyala
+                </button>
+                <span><strong>IBAN:</strong> TR31 0001 5001 5800 7324 3802 41</span>
+                <button
+                  onClick={() => copyToClipboard('TR31 0001 5001 5800 7324 3802 41')}
                   className={styles.copyButton}
                 >
                   Kopyala

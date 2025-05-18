@@ -15,7 +15,7 @@ export default function OrderHistoryPage() {
   
     const userId = user.id || user._id;
   
-    axios.get(`https://api.sakaoglustore.net/api/user/orders/${userId}`)
+    axios.get(`http://localhost:5000/api/user/orders/${userId}`)
       .then(res => {
         const orders = res.data;
         const grouped = {};
@@ -86,8 +86,7 @@ export default function OrderHistoryPage() {
             <div className={styles.orderProductInfo}>
               <h4>{product.name}</h4>
               <p className={styles.desc}>{product.description}</p>
-              <p>Adet: <strong>{item.quantity}</strong></p>
-              <p>Fiyat: <strong>{(product.price * item.quantity).toLocaleString()} TL</strong></p>
+              <p>Adet: <strong>{item.quantity}</strong></p>              <p>Toplam Fiyat: <strong>{Math.round((product.price + (product.price * (product.kdvOrani || 0)) + (product.kutuUcreti || 0) + (product.kargoUcreti || 0)) * item.quantity)} TL</strong></p>
             </div>
           </div>
         ) : (

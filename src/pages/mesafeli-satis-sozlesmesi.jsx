@@ -13,7 +13,7 @@ export default function MesafeliSatisSozlesmesi() {
         if (!storedUser) return;
   
         const parsedUser = JSON.parse(storedUser);
-        const res = await fetch(`https://api.sakaoglustore.net/api/user/by-email/${parsedUser.email}`);
+        const res = await fetch(`http://localhost:5000/api/user/by-email/${parsedUser.email}`);
         const data = await res.json();
   
         if (res.ok && data.user) {
