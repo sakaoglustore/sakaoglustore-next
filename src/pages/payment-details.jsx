@@ -86,7 +86,7 @@ export default function PaymentDetails() {
               <li>Yukarıdaki IBAN numarasına ödemeyi yapın</li>
               <li>Açıklama kısmına sadece referans numaranızı yazmayı unutmayın</li>
               <li>Ödemeniz kontrol edildikten sonra siparişiniz onaylanacaktır</li>
-              <li>Sipariş durumunuzu "Siparişlerim" sayfasından takip edebilirsiniz</li>
+              <li>Ödemeniz onaylandıktan sonra sipariş numaranız oluşacaktır. Siparişlerime git kısmından sipariş numaranıza erişebilirsiniz</li>
             </ol>
           </div>
           {/* BUTTON */}
