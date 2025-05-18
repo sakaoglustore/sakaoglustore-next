@@ -84,7 +84,7 @@ export default function PaymentDetails() {
             <h2>Ödeme Talimatları</h2>
             <ol>
               <li>Yukarıdaki IBAN numarasına ödemeyi yapın</li>
-              <li>Açıklama kısmına sadece sipariş numaranızı yazmayı unutmayın</li>
+              <li>Açıklama kısmına sadece referans numaranızı yazmayı unutmayın</li>
               <li>Ödemeniz kontrol edildikten sonra siparişiniz onaylanacaktır</li>
               <li>Sipariş durumunuzu "Siparişlerim" sayfasından takip edebilirsiniz</li>
             </ol>
