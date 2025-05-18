@@ -71,8 +71,12 @@ export default function ProductList({ category }) {
   };
 
   return (
-    <div className={styles.productList}>
-      <h2>{category} Kategorisindeki Ürünler</h2>
+    <div className={styles.pageContainer}>
+      {/* Başlık tam üstte ve ortada */}
+      <h2 className={styles.centeredTitle}>
+        {category} Kategorisindeki Ürünler
+      </h2>
+      {/* Ürünler grid */}
       <div className={styles.products}>
         {products.map(p => {
           const qty = cart[p._id] || 0;
@@ -89,7 +93,8 @@ export default function ProductList({ category }) {
               <div 
                 className={styles.productInfo} 
                 onClick={() => goToProductDetail(p._id)}
-              >                <img src={p.image} alt={p.name} />
+              >
+                <img src={p.image} alt={p.name} />
                 <h4>{p.name}</h4>
                 <p className={styles.price}>Birim Fiyat: {Math.round(unitPrice)} TL</p>
                 <p>Görsele tıkla ve neler çıkabilir gör!</p>

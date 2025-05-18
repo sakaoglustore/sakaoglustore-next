@@ -56,7 +56,7 @@ export default function Signup() {
       <input name="firstName" placeholder="Ad" onChange={handleChange} required />
       <input name="lastName" placeholder="Soyad" onChange={handleChange} required />
       <input name="email" placeholder="Email" onChange={handleChange} required />
-      <input name="phone" placeholder="Telefon" onChange={handleChange} required />
+      <input name="phone" placeholder="5555555555 (+90 ya da 0 koymayınız)" onChange={handleChange} required />
       <input name="password" type="password" placeholder="Şifre" onChange={handleChange} required />
       <button type="submit">Kayıt Ol</button>
       <p>{message}</p>
