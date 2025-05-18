@@ -15,7 +15,7 @@ export default function OrderHistoryPage() {
   
     const userId = user.id || user._id;
   
-    axios.get(`http://localhost:5000/api/user/orders/${userId}`)
+    axios.get(`https://api.sakaoglustore.net/api/user/orders/${userId}`)
       .then(res => {
         const orders = res.data;
         const grouped = {};
