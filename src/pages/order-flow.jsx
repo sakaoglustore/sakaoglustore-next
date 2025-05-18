@@ -32,7 +32,7 @@ export default function OrderFlowPage() {
   }, [user]);
 
   const fetchCart = () => {
-    fetch(`http://localhost:5000/api/cart/${userId}`)
+    fetch(`https://api.sakaoglustore.net/api/cart/${userId}`)
       .then(res => res.json())
       .then(data => {
         const cart = Array.isArray(data) ? data : data.cart || [];
@@ -87,7 +87,7 @@ export default function OrderFlowPage() {
 
   const updateQuantity = (productId, newQty) => {
     if (newQty < 1) return;
-    fetch('http://localhost:5000/api/cart/add', {
+    fetch('https://api.sakaoglustore.net/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: newQty })
@@ -95,7 +95,7 @@ export default function OrderFlowPage() {
   };
 
   const removeItem = (productId) => {
-    fetch(`http://localhost:5000/api/cart/remove/${userId}/${productId}`, {
+    fetch(`https://api.sakaoglustore.net/api/cart/remove/${userId}/${productId}`, {
       method: 'DELETE'
     }).then(() => fetchCart());
   };  
@@ -117,7 +117,7 @@ export default function OrderFlowPage() {
     const selectedAddress = addresses[selectedAddressIndex];
     const addressId = selectedAddress?._id;
     
-    const orderRes = await fetch(`http://localhost:5000/api/box/open-box/${userId}/${addressId}`, {
+    const orderRes = await fetch(`https://api.sakaoglustore.net/api/box/open-box/${userId}/${addressId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -133,7 +133,7 @@ export default function OrderFlowPage() {
       return;
     }
 
-    await fetch(`http://localhost:5000/api/cart/clear/${userId}`, {
+    await fetch(`https://api.sakaoglustore.net/api/cart/clear/${userId}`, {
       method: 'DELETE'
     });    setCartItems([]);    const orderId = orderData.orders[0]?.orderId;
     window.location.href = `/payment-details?orderId=${orderId}&total=${totals.finalTotal}`;
@@ -172,8 +172,8 @@ const handlePopupOpen = (index = null) => {
   }
 
   const url = editingIndex !== null
-    ? `http://localhost:5000/api/user/address/update/${user._id}/${editingIndex}`
-    : `http://localhost:5000/api/user/address/add/${user._id}`;
+    ? `https://api.sakaoglustore.net/api/user/address/update/${user._id}/${editingIndex}`
+    : `https://api.sakaoglustore.net/api/user/address/add/${user._id}`;
 
   const method = editingIndex !== null ? 'PUT' : 'POST';
 

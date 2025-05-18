@@ -21,7 +21,7 @@ export function PasswordChange() {
     setMsg(''); // eski mesajı temizle
     // Şifre değişikliği için backend'e istek at
     try {
-      const res = await fetch('http://localhost:5000/api/auth/change-password', {
+      const res = await fetch('https://api.sakaoglustore.net/api/auth/change-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

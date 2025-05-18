@@ -16,7 +16,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch('https://api.sakaoglustore.net/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -27,7 +27,7 @@ export default function Login() {
 
       if (res.ok) {
         // ✅ identifier doğrudan e-posta olarak kullanılır
-        const userInfoRes = await fetch(`http://localhost:5000/api/user/by-email/${form.identifier}`);
+        const userInfoRes = await fetch(`https://api.sakaoglustore.net/api/user/by-email/${form.identifier}`);
         const userInfo = await userInfoRes.json();
 
         if (userInfo?.user) {
