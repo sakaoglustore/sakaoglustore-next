@@ -151,7 +151,7 @@
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }  
-  .paymentDetailsPage h1 {
+  .paymentDetailsPage title {
     font-size: 1.5rem;
     text-align: center;
     margin: 0.75rem 0;
