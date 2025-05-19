@@ -9,6 +9,7 @@ export default function Signup() {
     firstName: '', lastName: '', email: '', phone: '', password: ''
   });
   const [message, setMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
@@ -31,12 +32,12 @@ export default function Signup() {
 
     const data = await res.json();
     setMessage(data.message);
+    setIsSuccess(res.status === 201);
 
     if (res.status === 201) {
-      // Başarılı kayıt sonrası login sayfasına yönlendir
       setTimeout(() => {
         router.push('/login');
-      }, 2000);
+      }, 3500);
     }
   };
 
@@ -45,11 +46,20 @@ export default function Signup() {
       <h2>Kayıt Ol</h2>
       <input name="firstName" placeholder="Ad" onChange={handleChange} required />
       <input name="lastName" placeholder="Soyad" onChange={handleChange} required />
-      <input name="email" placeholder="Email" onChange={handleChange} required />
+      <input name="email" placeholder="Email (Büyük ve küçük harf e dikkat ediniz)" onChange={handleChange} required />
       <input name="phone" placeholder="5555555555 (+90 ya da 0 koymayınız)" onChange={handleChange} required />
       <input name="password" type="password" placeholder="Şifre" onChange={handleChange} required />
       <button type="submit">Kayıt Ol</button>
-      <p>{message}</p>
+      
+      {message && (
+        <div className={`${styles.message} ${isSuccess ? styles.success : styles.error}`}>
+          {isSuccess ? (
+            <p className={styles.successMessage}>{message}</p>
+          ) : (
+            <p>{message}</p>
+          )}
+        </div>
+      )}
     </form>
   );
 }
