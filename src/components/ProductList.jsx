@@ -97,8 +97,10 @@ export default function ProductList({ category }) {
                 <img src={p.image} alt={p.name} />
                 <h4>{p.name}</h4>
                 <p className={styles.price}>Birim Fiyat: {Math.round(unitPrice)} TL</p>
+                <p>Fiyata kargo ve KDV dahildir</p>
                 <p>Görsele tıkla ve neler çıkabilir gör!</p>
                 {qty > 0 && <p>Toplam: {Math.round(totalPrice)} TL</p>}
+                
               </div>
 
               <div className={styles.quantityControl}>

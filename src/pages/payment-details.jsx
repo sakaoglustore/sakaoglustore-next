@@ -14,7 +14,7 @@ export default function PaymentDetails() {
     if (orderId) {
       let shownTotal = total;
       if (!shownTotal || isNaN(Number(shownTotal))) shownTotal = "0.00";
-      else shownTotal = Number(shownTotal).toFixed(2);
+      else shownTotal = Math.round(Number(shownTotal)); // Yuvarlama işlemi eklendi
 
       setOrderInfo({
         id: orderId,

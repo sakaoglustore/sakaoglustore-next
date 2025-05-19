@@ -131,12 +131,10 @@ export default function OrderFlowPage() {
     if (!orderRes.ok) {
       alert(orderData.message || 'Sipariş sırasında hata oluştu.');
       return;
-    }
-
-    await fetch(`https://api.sakaoglustore.net/api/cart/clear/${userId}`, {
+    }    await fetch(`https://api.sakaoglustore.net/api/cart/clear/${userId}`, {
       method: 'DELETE'
     });    setCartItems([]);    const orderId = orderData.orders[0]?.orderId;
-    window.location.href = `/payment-details?orderId=${orderId}&total=${totals.finalTotal}`;
+    window.location.href = `/payment-details?orderId=${orderId}&total=${Math.round(totals.finalTotal)}`;
 
   } catch (err) {
     console.error('Satın alma hatası:', err);
@@ -216,15 +214,14 @@ const handlePopupOpen = (index = null) => {
                         <button onClick={() => updateQuantity(item.productId._id, item.quantity - 1)}>-</button>
                       ) : (
                         <button className={styles.removeBtn} onClick={() => removeItem(item.productId._id)}>Kaldır</button>
-                      )}
-                      <span>{item.quantity}</span>
+                      )}                      <span>{item.quantity}</span>
                       <button onClick={() => updateQuantity(item.productId._id, item.quantity + 1)}>+</button>
                     </div>
-                    <p>Fiyat: {totals.finalTotal.toFixed(2)} TL</p>
+                    <p>Fiyat: {Math.round(totals.finalTotal)} TL</p>
                   </div>
                 </div>
               ))}
-              <h3>Toplam: {totals.finalTotal.toFixed(2)} TL</h3>
+              <h3>Toplam: {Math.round(totals.finalTotal)} TL</h3>
             </div>
           )}
           <div className={styles.addressPage}>
@@ -256,14 +253,14 @@ const handlePopupOpen = (index = null) => {
               </button>
             </div>
           </div>
-        </div>
-        <div className={styles.orderSummary}>
+        </div>        <div className={styles.orderSummary}>
           <h3>Fiyat Özeti</h3>
-          <p>Ambalaj bedeli: {totals.totalBoxFee.toFixed(2)} TL</p>
-          <p>Kargo Ücreti: {totals.totalShipping.toFixed(2)} TL</p>
-          <p>KDV: {totals.totalVAT.toFixed(2)} TL</p>          <p>Net Fiyat: {totals.net.toFixed(2)} TL</p>
+          <p>Ambalaj bedeli: {Math.round(totals.totalBoxFee)} TL</p>
+          <p>Kargo Ücreti: {Math.round(totals.totalShipping)} TL</p>
+          <p>KDV: {Math.round(totals.totalVAT)} TL</p>          
+          <p>Net Fiyat: {Math.round(totals.net)} TL</p>
           <hr />
-          <p><strong>Toplam: {totals.finalTotal.toFixed(2)} TL</strong></p>          <div className={styles.checkboxContainer}>
+          <p><strong>Toplam: {Math.round(totals.finalTotal)} TL</strong></p>          <div className={styles.checkboxContainer}>
             <input
               type="checkbox"
               id="kvkk"
