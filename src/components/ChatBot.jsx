@@ -61,7 +61,7 @@ export default function ChatBot() {
     } else if (option === 'İade veya değişim yapabilir miyim?') {
       setMessages(prev => [...prev, {
         from: 'bot',
-        text: '🔁 Gizemli kutu elinize ulaştıktan sonra diye düzeltelim iade/değişim kapsamına girmez. Ancak ürün arızalıysa iade yapılabilir.'
+        text: '🔁 Gizemli kutu elinize ulaştıktan sonra iade/değişim kapsamına girmez. Ancak ürün arızalıysa iade yapılabilir.'
       }, addInitialOptions()]);
     }
     else if (option === 'Sakaoğlu Store Gizemli Kutusu neden zarar ettirmez?') {
