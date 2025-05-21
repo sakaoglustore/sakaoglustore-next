@@ -61,7 +61,7 @@ export default function ChatBot() {
     } else if (option === 'İade veya değişim yapabilir miyim?') {
       setMessages(prev => [...prev, {
         from: 'bot',
-        text: '🔁 Gizemli kutu elinize ulaştıktan sonra iade/değişim kapsamına girmez. Ancak ürün arızalıysa iade yapılabilir.'
+        text: '🔁 Sürpriz kutu elinize ulaştıktan sonra değişim veya iade hakkınız yoktur. Eğer ürün kırık veya bozuk gelir ise aynı gün size en yakın Yurtiçi Kargo şubesinden tutanak tutmanız gerekir ve aynı ürünün çalışan hali size ulaşacaktır.'
       }, addInitialOptions()]);
     }
     else if (option === 'Sakaoğlu Store Gizemli Kutusu neden zarar ettirmez?') {
