@@ -69,6 +69,7 @@ export default function Signup() {
         required 
       />
       <input name="password" type="password" placeholder="Şifre" onChange={handleChange} required />
+      <p>Spam klasöründen ‘spam değildir’ tıklayın ve onay mailini gelen klasörüne taşıyın. Gelen klasöre gidin ve kayıdınızı onaylayın</p>
       <button type="submit">Kayıt Ol</button>
       
       {message && (
