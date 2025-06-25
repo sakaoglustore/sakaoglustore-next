@@ -1,40 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Sakaoglu Store Next.js
 
-## Getting Started
+Sakaoglu Store, Next.js ile geliştirilmiş modern bir e-ticaret uygulamasıdır. Kullanıcılar ürünleri inceleyebilir, sepetine ekleyebilir, adres yönetimi yapabilir ve sipariş verebilir. Arkadaş davet sistemiyle kullanıcılar birbirlerine özel indirim kodları gönderebilir ve hem davet eden hem de davet edilen kişi indirim kazanır.
 
-First, run the development server:
+## Özellikler
+- Next.js tabanlı modern frontend
+- Kişiye özel indirim kodu sistemi
+- Arkadaş davet/referral ile çift taraflı indirim
+- Adres yönetimi (ekle, düzenle, sil)
+- Sepet ve sipariş akışı
+- KVKK ve Mesafeli Satış Sözleşmesi onayı
+- Responsive ve kullanıcı dostu arayüz
 
+## Kurulum
+
+### 1. Gerekli Bağımlılıkları Yükleyin
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Geliştirme Sunucusunu Başlatın
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Uygulama [http://localhost:3000](http://localhost:3000) adresinde çalışacaktır.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### 3. Backend Gereksinimi
+Bu frontend, [sakaoglustoreBackend](https://github.com/sakaoglu/sakaoglustoreBackend) ile birlikte çalışır. Backend'i de başlatmayı unutmayın.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+## Kullanıcı Akışı
+- Kayıt olan her kullanıcıya otomatik bir indirim kodu atanır.
+- Kullanıcılar profil sayfasında kendi kodunu görebilir ve paylaşabilir.
+- Yeni kullanıcılar ilk siparişlerinde başka birinin kodunu kullanarak 50 TL indirim alır.
+- Kod sahibi de her yeni kullanımda 50 TL indirim kazanır.
+- Kullanıcı kendi kodunu kullanamaz, her kullanıcı sadece bir kez başka bir kod kullanabilir.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Geliştirici Notları
+- Kodlar ve stiller modern ve sade tutulmuştur.
+- Tüm API istekleri `http://localhost:5000` backend adresine yönlendirilmiştir.
+- Çevrimdışı geliştirme için backend ve frontend aynı anda çalıştırılmalıdır.
 
-## Learn More
+## Katkı
+Katkıda bulunmak için pull request gönderebilir veya issue açabilirsiniz.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+Daha fazla bilgi için [Next.js dokümantasyonu](https://nextjs.org/docs) ve [Vercel](https://vercel.com/) kaynaklarını inceleyebilirsiniz.
